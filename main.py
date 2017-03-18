@@ -1,10 +1,12 @@
-from enemy import *
-from tower import *
+#from enemy import Enemy
+#from tower import Tower
+from setup import Setup
+
 
 def main():
-	print("asdf")
-	vihu1 = Enemy(80, 10, 80, Enemy.steel)
-	vihu1.reduce_hitpoints(50)
-	print(vihu1.type)
+	file_name = "Game_data_1.0.txt"
+
+	Setup().load_game(file_name)
+	
 
 main()
