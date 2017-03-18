@@ -1,0 +1,43 @@
+Defence 1.0 Game data
+
+---Comments---
+Data storage still on planning phase.
+
+Headers of different information blocks are highlighted with "--".
+Whitespace is completely igored BUT it is used as information divider.
+
+
+---GUI dimensions---
+#GUI
+Name		Defence
+Ratio		16/9
+Board		70%
+
+
+---Board size---
+#Board		
+Width		100
+Height		50		
+
+---Enemies---
+#Enemy
+Type		KILLER1
+Hitpoints	100
+Armour		0
+Speed		10
+Worth		50
+
+	
+---Towers---
+#Tower
+Type		Rocket
+Damage		5
+Range		100
+Reload_time	10
+Build_time	10
+
+
+---Missiles---
+#Missile
+Type		Rocket
+Speed		50
