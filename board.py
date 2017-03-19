@@ -6,9 +6,8 @@ from square import Square
 
 class Board(object):
 
+
 	def __init__ (self, width, height):
-		#self.enemys = []		# container
-		#self.missiles = []		# container
 
 		self.squares = [None] * width
 		for i in range(self.get_width()):
@@ -16,6 +15,9 @@ class Board(object):
 			for j in range(self.get_height()):
 				self.squares[i][j] = Square()
 
+		# Containers
+		self.enemys = []
+		self.missiles = []
 		self.route_points = []
 
 
@@ -29,16 +31,21 @@ class Board(object):
 		return len(self.squares[0])
 
 
-	def add_tower(self, tower, place):
+	def add_tower(self, tower, position):
 		# Adds tower to the board
-		if self.squares[placement[0]][placement[1]].is_empty():
-			self.squares[placement[0]][placement[1]].set_tower(tower)
+		if self.squares[position[0]][position[1]].is_empty():
+			self.squares[position[0]][position[1]].set_tower(tower)
 		else:
 			print("CANNOT ADD")													#----------------------- NOT IMPLEMENTED
 
 
-	def add_route_point(self):
-		self.squares[0][0] = "test"
+	def add_destination(self, position):
+		# Adds next destination for enemys to the board
+		if self.squares[int(position[0])][int(position[1])].is_empty():
+			self.route_points.append(position)
+
+		else:
+			print("CANNOT ADD")													#----------------------- NOT IMPLEMENTED
 
 
 	"""def remove_tower(self, tower):
