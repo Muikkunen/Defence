@@ -1,17 +1,16 @@
-class Enemy():
+class Enemy(object):
 
-	wood = 0
-	steel = 1
-
-
-	def __init__(self, hitpoints, armour, speed, type):
+	def __init__ (self, enemy_type, name, hitpoints, armour, speed, worth):
 		# Pass these for subclass
-		self._hitpoints = hitpoints
-		self._armour = armour
-		self._speed = speed
-		self._type = type
+		self.enemy_type = enemy_type
+		self.name = name
+		self.hitpoints = hitpoints
+		self.armour = armour
+		self.speed = speed
+		self.worth = worth
 
-	# Next four methods will return the class Enemy data
+
+	# Next four methods will return the Enemy class's data
 	def get_hitpoints(self):
 		return self._hitpoints
 
@@ -29,7 +28,8 @@ class Enemy():
 		self._hitpoints -= damage
 
 
+	"""
 	hitpoints = property(get_hitpoints)
 	armour = property(get_armour)
 	speed = property(get_speed)
-	type = property(get_type)
+	enemy_type = property(get_type)"""
