@@ -40,11 +40,19 @@ Name		Easy
 ---Enemies---
 #Enemy
 Type		KILLER1
+Name		Should enemy have a name?
 Hitpoints	100
 Armour		0
 Speed		10
 Worth		50
 
+#Enemy
+Type		KILLER2
+Name		Should enemy have a name?
+Hitpoints	100
+Armour		0
+Speed		10
+Worth		50
 	
 ---Towers---
 #Tower
