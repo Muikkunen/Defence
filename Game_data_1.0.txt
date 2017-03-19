@@ -3,8 +3,10 @@ Defence 1.0 Game data
 ---Comments---
 Data storage still on planning phase.
 
-Headers of different information blocks are highlighted with "--".
+Information blocks are highlighted with "---".
 Whitespace is completely igored BUT it is used as information divider.
+
+Ordering of the blocks is irrelevant if not stated otherwise.
 
 
 ---GUI dimensions---
@@ -14,10 +16,26 @@ Ratio		16/9
 Board		70%
 
 
+---Game initial values---
+#Game
+Money		1000
+Lives		10
+
 ---Board size---
 #Board		
 Width		100
-Height		50		
+Height		50
+
+
+---Routes--- ---Should be after Board size---
+#Route
+0		12
+32		12
+32		37
+65		37
+65		12
+99		12
+Name		Easy
 
 ---Enemies---
 #Enemy
@@ -41,3 +59,12 @@ Build_time	10
 #Missile
 Type		Rocket
 Speed		50
+
+
+---Waves---
+#Waves
+KILLER1		5
+KILLER2		3
+KILLER1		10
+KILLER2		5
+KILLER1		20
