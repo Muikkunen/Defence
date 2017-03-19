@@ -7,7 +7,17 @@ class Game():
 		self.points = 0
 		self.lives = 0
 		self.routes = []		# Container for route names
+		self.enemy_types = {}
+		self.missile_types = {}
 
+
+	# Adds enemy's type and the enemy itself to the enemy_types list
+	def add_enemy_type(self, type_name, enemy):
+		self.enemy_types[type_name] = enemy
+
+
+	def add_missile_type(self, type_name, missile):
+		self.missile_types[type_name] = missile
 
 	def lose_life(self):
 		lives -= 1
