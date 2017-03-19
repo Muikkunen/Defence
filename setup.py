@@ -2,6 +2,9 @@ from io import StringIO
 
 from game import Game
 from board import Board
+from enemy import Enemy
+from missile import Missile
+
 
 class CorruptedGameData(Exception):
 	def __init__ (self, message):
@@ -12,6 +15,7 @@ class EOFReached(Exception):
 		super(EOFReached, self).__init__(message)
 
 class Setup(object):
+
 	def get_current_information(self, file):
 
 		# Iterate through file until information has been found
@@ -33,6 +37,49 @@ class Setup(object):
 			return current_information
 
 
+	def load_missile(self, file, game):
+		missile_type, speed = (None,) * 2
+
+		while True:
+			current_line = self.get_current_information(file)	
+
+			if current_line[0] == "Type":
+				missile_type = current_line[1]
+			elif current_line[0] == "Speed":
+				speed = int(current_line[1])
+
+			if None not in (missile_type, speed):
+				missile = Missile(missile_type, speed)
+				game.add_missile_type(missile_type, missile)
+				return
+
+
+
+	def load_enemy(self, file, game):
+		enemy_type, name, hitpoints, armour, speed, worth = (None,) * 6
+
+		while True:
+			current_line = self.get_current_information(file)	
+
+			if current_line[0] == "Type":
+				enemy_type = current_line[1]
+			elif current_line[0] == "Name":
+				name = current_line[1]
+			elif current_line[0] == "Hitpoints":
+				hitpoints = int(current_line[1])
+			elif current_line[0] == "Armour":
+				armour = int(current_line[1])
+			elif current_line[0] == "Speed":
+				speed = int(current_line[1])
+			elif current_line[0] == "Worth":
+				worth = int(current_line[1])
+
+			if None not in (enemy_type, name, hitpoints, armour, speed, worth):
+				enemy = Enemy(enemy_type, name, hitpoints, armour, speed, worth)
+				game.add_enemy_type(enemy_type, enemy)	
+				return
+
+
 	def load_route(self, file, game):
 		while True:
 			current_line = self.get_current_information(file)
@@ -47,7 +94,7 @@ class Setup(object):
 
 			# Convert information from list to tuple and strings inside the list to integers
 			position = tuple(map(int, current_line))
-			
+
 			game.get_board().add_destination(position)
 
 
@@ -104,6 +151,11 @@ class Setup(object):
 				elif current_information[0] == "#Route":
 					self.load_route(file, game)
 
+				elif current_information[0] == "#Enemy":
+					self.load_enemy(file, game)
+
+				elif current_information[0] == "#Missile":
+					self.load_missile(file, game)
 
 
 		except OSError:
