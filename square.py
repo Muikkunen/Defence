@@ -1,28 +1,28 @@
 class Square(object):
 
+	EMPTY = 0
+	ROUTE = 1
+	TOWER = 2
+
 	def __init__ (self):
-		self.route = None
-		self.tower = None
+		self._type = Square.EMPTY
 
 	def set_route(self):
-		# Marks square as route, if possible. Returns boolean value stating whether succesfull or not
-		if self.tower == None:
-			self.route == True
+		# Marks square as route, if possible. Returns boolean value stating whether succesful or not
+		if self._type == 0:
+			self._type = Square.ROUTE
 			return True
 		else:
 			return False
 
-	def set_tower(self, tower):
-		# Sets tower to the square, if possible. Returns boolean value stating whether succesfull or not
-		if self.route == None:
-			self.tower == tower
+	def set_tower(self):
+		# Marks square as tower, if possible. Returns boolean value stating whether succesfull or not
+		if self._type == Square.EMPTY:
+			self._type = Square.TOWER
 			return True
 		else:
 			return False
 
-	def is_empty(self):
-		# Returns boolean value whether square is empty or not
-		if self.tower == None and self.route == None:
-			return True
-		else:
-			return False
+	def contains(self):
+		# Returns Square type (EMPTY = 0, ROUTE = 1 or TOWER = 2) 
+		return self._type
