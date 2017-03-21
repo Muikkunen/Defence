@@ -37,6 +37,30 @@ class Setup(object):
 			return current_information
 
 
+	def load_waves(self, file, game):
+		# In order to keep the game data file as simple as possible, this function contains additional
+		# 	operation to check whether all waves have been read
+		while True:
+			current_line = self.get_current_information(file)
+
+			# Return if the first character of the line is '-' thus meaning that all waves have been read
+			if current_line[0][0] == "-":
+				return
+
+			# In case information block's highlighting is missing, examine if next block has been reached
+			current_line_last_position = file.tell()
+			current_line = self.get_current_information(file)
+
+			if current_line[0] == "#":
+				# Move back to earlier line if new information block has been reached because
+				# 	'load_all()' expects that this point has not been reached
+				file.seek(current_line_last_position)
+				return
+
+			# Add certain wave to the Game
+			game.add_wave(current_line[0], int(current_line[1]))
+
+
 	def load_missile(self, file, game):
 		missile_type, speed = (None,) * 2
 
@@ -84,9 +108,12 @@ class Setup(object):
 		while True:
 			current_line = self.get_current_information(file)
 
-			# When name has been read, the function expects that the route has been read also
+			# When name has been read, the function expects that the route has also been read
 			if current_line[0] == "Name":
 				game.add_route_name(current_line[1])
+
+				# According to the position points, add the whole route to the board
+				game.get_board().add_route()
 				return
 
 			if current_line[0][0] == "#":
@@ -99,7 +126,6 @@ class Setup(object):
 
 
 	def load_board(self, file):
-
 		# Set up variables for board measurements
 		width, height = None, None
 
@@ -157,9 +183,12 @@ class Setup(object):
 				elif current_information[0] == "#Missile":
 					self.load_missile(file, game)
 
+				elif current_information[0] == "#Waves":
+					self.load_waves(file, game)
+
 
 		except OSError:
 			raise CorruptedGameData("File missing or corrupted")
 
 		except EOFReached:
-			return
+			return game
