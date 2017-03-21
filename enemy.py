@@ -24,6 +24,10 @@ class Enemy(object):
 		return self._type
 
 
+	#def set_location(self):
+	#	self.location = location
+
+
 	def reduce_hitpoints(self, damage):				# In case enemy is hit, lower it's hitpoints
 		self._hitpoints -= damage
 

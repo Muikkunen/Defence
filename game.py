@@ -6,10 +6,15 @@ class Game():
 		self.money = 0
 		self.points = 0
 		self.lives = 0
-		self.routes = []		# Container for route names
-		self.enemy_types = {}
-		self.missile_types = {}
+		self.routes = []			# Container for route names
+		self.waves = []				# Container for different waves
+		self.tower_types = {}
+		self.enemy_types = {}		# Dictionary for different enemies
+		self.missile_types = {}		# Dctionary for different missiles
 
+
+	def add_wave(self, enemy, amount):
+		self.waves.append((enemy, amount))
 
 	# Adds enemy's type and the enemy itself to the enemy_types list
 	def add_enemy_type(self, type_name, enemy):
@@ -19,8 +24,9 @@ class Game():
 	def add_missile_type(self, type_name, missile):
 		self.missile_types[type_name] = missile
 
+
 	def lose_life(self):
-		lives -= 1
+		self.lives -= 1
 
 
 	def set_money(self, money):
