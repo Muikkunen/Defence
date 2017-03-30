@@ -17,6 +17,10 @@ def main():
 			elif game.board.squares[i][j].contains() == 1:
 				print(" ", end="")
 
+	#game.board.current_wave(game.board.waves[0])
+
+	for i in range(5):
+		print(game.board.waves[0][1].name)
 	
 
 

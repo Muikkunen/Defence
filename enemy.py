@@ -10,6 +10,13 @@ class Enemy(object):
 		self.worth = worth
 
 
+	""" # Move the enemy
+	def move(self):
+		
+		
+		# Tarkastele, onko maalissa
+
+
 	# Next four methods will return the Enemy class's data
 	def get_hitpoints(self):
 		return self._hitpoints

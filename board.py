@@ -16,9 +16,10 @@ class Board(object):
 
 		# Containers
 		self.towers = []
-		self.enemys = []
+		self.enemies = []
 		self.missiles = []
-		self.route_points = []
+		self.route_points = []		# Route points
+		self.waves = []				# Container for different waves
 
 
 	def get_width(self):
@@ -29,6 +30,18 @@ class Board(object):
 	def get_height(self):
 		# Returns the board's height: int
 		return len(self.squares[0])
+
+
+	def add_wave(self, enemy, amount):
+		sub_list_of_enemies = []
+		for i in range(amount):
+			sub_list_of_enemies.append(enemy)
+		self.waves.append(sub_list_of_enemies)
+
+	"""
+	def current_wave(self, wave): #---------------------------NOT READY-----------------------------------
+		for enemy in range(wave):
+			self.enemies.append(enemy)"""
 
 
 	def add_tower(self, position, tower):
@@ -43,7 +56,7 @@ class Board(object):
 
 
 	def add_destination(self, position):
-		# Adds next destination for enemys to the board
+		# Adds next destination for enemies to the board
 		if self.squares[int(position[0])][int(position[1])].contains() == 0:
 			self.route_points.append(position)
 
@@ -61,8 +74,6 @@ class Board(object):
 		# Iterate through route points until second last to prevent checking last value with one that doesn't exist
 		for i in range(amount_of_route_points - 1):
 			self.squares[self.route_points[i + 1][0]][self.route_points[i + 1][1]].set_route()
-
-			print("x: {} y: {}".format(self.route_points[i][0], self.route_points[i][1]))
 
 			# If consecutive route points have the same x-coordinate set the vertical squares between first and second point to route
 			if self.route_points[i][0] == self.route_points[i + 1][0]:
@@ -105,7 +116,7 @@ class Board(object):
 
 
 	def add_enemy(self, enemy):
-		self.enemys.append(enemy)
+		self.enemies.append(enemy)
 
 
 	def add_missile(self, missile):

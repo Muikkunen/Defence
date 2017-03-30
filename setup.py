@@ -41,6 +41,7 @@ class Setup(object):
 		# In order to keep the game data file as simple as possible, this function contains additional
 		# 	operation to check whether all waves have been read
 		while True:
+			current_line_last_position = file.tell()
 			current_line = self.get_current_information(file)
 
 			# Return if the first character of the line is '-' thus meaning that all waves have been read
@@ -48,17 +49,26 @@ class Setup(object):
 				return
 
 			# In case information block's highlighting is missing, examine if next block has been reached
-			current_line_last_position = file.tell()
+			#	by examining if the first character is '#'
+			next_of_current_line = file.readline()
+
+			# Examine that file has not been completely read
+			if next_of_current_line != "":
+				if next_of_current_line[0] == "#":
+					# Move back to earlier line if new information block has been reached because
+					# 	'load_all()' expects that this point has not been reached
+					file.seek(current_line_last_position)
+					return
+
+			file.seek(current_line_last_position)
 			current_line = self.get_current_information(file)
 
-			if current_line[0] == "#":
-				# Move back to earlier line if new information block has been reached because
-				# 	'load_all()' expects that this point has not been reached
-				file.seek(current_line_last_position)
-				return
-
-			# Add certain wave to the Game
-			game.add_wave(current_line[0], int(current_line[1]))
+			# Examine that type is defined in game.enemy_types
+			if current_line[0] in game.get_enemy_types():
+				# Add current wave to the Board
+				game.get_board().add_wave(game.get_enemy_types()[current_line[0]], int(current_line[1]))
+			else:												#----------------------------------NOT IMPLEMENTED---------------
+				print("Enemy not in game types")
 
 
 	def load_missile(self, file, game):
