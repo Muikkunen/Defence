@@ -4,7 +4,7 @@ Defence 1.0 Game data
 Data storage still on planning phase.
 
 Information blocks are highlighted with "---".
-Whitespace is completely igored BUT it is used as information divider.
+All whitespace is completely igored BUT it is used as information divider.
 
 Ordering of the blocks is irrelevant if not stated otherwise.
 
@@ -40,7 +40,7 @@ Name		Easy
 ---Enemies---
 #Enemy
 Type		KILLER1
-Name		Should enemy have a name?
+Name		Name_KILLER1 Should enemy have a name?
 Hitpoints	100
 Armour		0
 Speed		10
@@ -48,12 +48,12 @@ Worth		50
 
 #Enemy
 Type		KILLER2
-Name		Should enemy have a name?
-Hitpoints	100
+Name		Name_KILLER2 Should enemy have a name?
+Hitpoints	200
 Armour		0
 Speed		10
-Worth		50
-	
+Worth		100
+
 ---Towers---
 #Tower
 Type		Rocket
