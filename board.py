@@ -18,18 +18,28 @@ class Board(object):
 		self.towers = []
 		self.enemies = []
 		self.missiles = []
-		self.route_points = []		# Route points
+		self.route_points = []		# Container for route points
 		self.waves = []				# Container for different waves
+
+
+	def set_route_points(self, route_points):
+		self.route_points = route_points
 
 
 	def get_width(self):
 		# Returns the board's width: int
 		return len(self.squares)
 
-
 	def get_height(self):
 		# Returns the board's height: int
 		return len(self.squares[0])
+
+	def get_enemies(self):
+		# Returns the container list of enemies
+		return self.enemies
+
+	def get_route_points(self):
+		return self.route_points
 
 
 	def add_wave(self, enemy, amount):
@@ -54,14 +64,14 @@ class Board(object):
 		else:
 			print("CANNOT ADD")													#----------------------- NOT IMPLEMENTED
 
-
+	"""
 	def add_destination(self, position):
 		# Adds next destination for enemies to the board
 		if self.squares[int(position[0])][int(position[1])].contains() == 0:
 			self.route_points.append(position)
 
 		else:
-			print("CANNOT ADD")													#----------------------- NOT IMPLEMENTED
+			print("CANNOT ADD")													#----------------------- NOT IMPLEMENTED"""
 
 
 	def add_route(self):
@@ -106,8 +116,8 @@ class Board(object):
 						print("CANNOT ADD")										#----------------------- NOT IMPLEMENTED
 
 
-			# If route points have the same y-coordinate set the horizontal squares between first and second point to route
-			#elif first_route_point[1] == second_route_point[1]:
+	def kill_enemy(self, enemy):
+		self.enemies.remove(enemy)
 
 
 

@@ -6,11 +6,25 @@ class Game():
 		self.money = 0
 		self.points = 0
 		self.lives = 0
-		self.routes = []			# Container for route names (Easy, Medium, Hard)
+		self.routes = []			# Container for different routes (E.g. Easy, Medium, Hard)
 
 		self.tower_types = {}
 		self.enemy_types = {}		# Dictionary for different enemies
-		self.missile_types = {}		# Dctionary for different missiles
+		self.missile_types = {}		# Dictionary for different missiles
+
+
+	def check_dead_enemies(self):
+		for enemy in self.board.get_enemies():
+
+			# Check if enemy's hitpoints are less than or equal to 0
+			if enemy.get_hitpoins() <= 0:
+
+				# Increase player's money according to the enemy's worth
+				self.points += enemy.get_worth()
+
+				# Remove enemy from board
+				self.board.get_enemies().remove(enemy)
+
 
 
 	# Adds enemy's type and the enemy itself to the enemy_types dictionary
@@ -21,9 +35,19 @@ class Game():
 	def add_missile_type(self, type_name, missile):
 		self.missile_types[type_name] = missile
 
+	def add_route(self, route_name, route_points):
+		new_route = [route_name, route_points]
+		#new_route = [None] * 2
+		#new_route[0] = route_name
+		#new_route[1] = route_points
+
+		self.routes.append(new_route)
+
 
 	def lose_life(self):
 		self.lives -= 1
+		if self.lives <= 0:
+			print("Game over")
 
 
 	def set_money(self, money):
@@ -38,9 +62,6 @@ class Game():
 		self.board = board
 
 
-
-	def add_route_name(self, route_name):
-		self.routes.append(route_name)
 
 
 	def get_money(self):
@@ -57,6 +78,9 @@ class Game():
 
 	def get_enemy_types(self):
 		return self.enemy_types
+
+	def get_route_points(self):
+		return self.route_points
 
 
 	"""money = property(set_money, get_money)
