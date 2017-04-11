@@ -108,22 +108,24 @@ class Setup(object):
 			elif current_line[0] == "Worth":
 				worth = int(current_line[1])
 
-			if None not in (enemy_type, name, hitpoints, armour, speed, worth):
-				enemy = Enemy(enemy_type, name, hitpoints, armour, speed, worth)
+			if None not in (enemy_type, name, hitpoints, armour, speed, worth, game):
+				enemy = Enemy(enemy_type, name, hitpoints, armour, speed, worth, game)
 				game.add_enemy_type(enemy_type, enemy)	
 				return
 
 
 	def load_route(self, file, game):
+
+		route_points = []		# Empty container for route points
+
 		while True:
 			current_line = self.get_current_information(file)
 
 			# When name has been read, the function expects that the route has also been read
 			if current_line[0] == "Name":
-				game.add_route_name(current_line[1])
 
 				# According to the position points, add the whole route to the board
-				game.get_board().add_route()
+				game.add_route(current_line[1], route_points)
 				return
 
 			if current_line[0][0] == "#":
@@ -132,7 +134,8 @@ class Setup(object):
 			# Convert information from list to tuple and strings inside the list to integers
 			position = tuple(map(int, current_line))
 
-			game.get_board().add_destination(position)
+			# Add certain position to the route list's second slot as two-dimensional list
+			route_points.append(position)
 
 
 	def load_board(self, file):
