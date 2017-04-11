@@ -37,6 +37,15 @@ Height		50
 99		12
 Name		Easy
 
+#Route
+0		37
+32		37
+32		12
+65		12
+65		37
+99		37
+Name		Medium
+
 ---Enemies---
 #Enemy
 Type		KILLER1
