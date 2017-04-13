@@ -52,7 +52,7 @@ Type		KILLER1
 Name		Name_KILLER1 Should enemy have a name?
 Hitpoints	100
 Armour		0
-Speed		10
+Speed		5
 Worth		50
 
 #Enemy

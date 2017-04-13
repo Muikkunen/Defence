@@ -7,9 +7,9 @@ class Enemy(object):
 		self.enemy_type = enemy_type
 		self.name = name
 		self.hitpoints = hitpoints
-		self.armour = armour
-		self.speed = speed
-		self.worth = worth
+		self._armour = armour
+		self._speed = speed
+		self._worth = worth
 		self.game = game
 		self.location = None
 		self.destination = None
@@ -35,12 +35,12 @@ class Enemy(object):
 		else:
 			second_indicator = -1
 
-		# Calculate the distance between the current location and the next destination
-		distance = distance_between(self.location, self.destination)
+		# Calculate the remaining distance between the current location and the next destination
+		remaining_distance = distance(self.location, self.destination)
 
 		# If enemy will reach next route point on it's way, move to the next coordinate point
 		#	and then change go to the second coordinate point as much as there's 'speed' left
-		if distance < speed:
+		if remaining_distance < speed:
 			self.location = self.destination
 
 			# Set the next destination, if the set_next_destination() function returns True, Enemy has reached its goal
@@ -49,7 +49,7 @@ class Enemy(object):
 				# If Enemy has reached its true, function returns True to indicate that the Enemy should be killed
 				return True							
 
-			self.move(speed - distance)				# Call function again to move remaining amount of the speed
+			self.move(speed - remaining_distance)	# Call function again to move remaining amount of the speed
 			return False							# Enemy is still alive
 
 		# Finally actually move the enemy and convert to int to avoid decimal numbers which occur due to multiplying with -1
@@ -79,16 +79,16 @@ class Enemy(object):
 		return self.hitpoints
 
 	def get_armour(self):
-		return self.armour
+		return self._armour
 
 	def get_speed(self):
-		return self.speed
+		return self._speed
 
 	def get_type(self):
-		return self.type
+		return self.enemy_type
 
 	def get_worth(self):
-		return self.worth
+		return self._worth
 
 	def set_location(self, location):
 		self.location = location

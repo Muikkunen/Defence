@@ -83,5 +83,4 @@ class Tower(object):
 
 	def shoot(self, target):
 		missile = Missile(target)
-		game.add_missile(missile, target)
-
+		game.get_board().add_missile(missile)
