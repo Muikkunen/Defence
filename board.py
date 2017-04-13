@@ -64,14 +64,9 @@ class Board(object):
 		else:
 			print("CANNOT ADD")													#----------------------- NOT IMPLEMENTED
 
-	"""
-	def add_destination(self, position):
-		# Adds next destination for enemies to the board
-		if self.squares[int(position[0])][int(position[1])].contains() == 0:
-			self.route_points.append(position)
 
-		else:
-			print("CANNOT ADD")													#----------------------- NOT IMPLEMENTED"""
+	def add_missile_type(self, missile):
+		self.missiles.append(missile)
 
 
 	def add_route(self):

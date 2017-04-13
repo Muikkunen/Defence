@@ -8,7 +8,7 @@ class Game():
 		self.lives = 0
 		self.routes = []			# Container for different routes (E.g. Easy, Medium, Hard)
 
-		self.tower_types = {}
+		self.tower_types = {}		# Dictionary for different towers
 		self.enemy_types = {}		# Dictionary for different enemies
 		self.missile_types = {}		# Dictionary for different missiles
 
@@ -31,9 +31,6 @@ class Game():
 	def add_enemy_type(self, type_name, enemy):
 		self.enemy_types[type_name] = enemy
 
-
-	def add_missile_type(self, type_name, missile):
-		self.missile_types[type_name] = missile
 
 	def add_route(self, route_name, route_points):
 		new_route = [route_name, route_points]
