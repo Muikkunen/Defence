@@ -85,6 +85,12 @@ class Game():
 	def get_enemy_types(self):
 		return self.enemy_types
 
+	def get_tower_types(self):
+		return self.tower_types
+
+	def get_missile_types(self):
+		return self.missile_types
+
 	def get_route_points(self):
 		return self.route_points
 
