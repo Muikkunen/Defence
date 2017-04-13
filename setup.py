@@ -3,6 +3,7 @@ from io import StringIO
 from game import Game
 from board import Board
 from enemy import Enemy
+from tower import Tower
 from missile import Missile
 
 
@@ -87,7 +88,27 @@ class Setup(object):
 				game.add_missile_type(missile_type, missile)
 				return
 
+	def load_tower(self, file, game):
+		tower_type, damage, shoot_range, reload_time, build_time = (None,) * 5
 
+		while True:
+			current_line = self.get_current_information(file)
+
+			if current_line[0] == "Type":
+				tower_type = current_line[1]
+			elif current_line[0] == "Damage":
+				damage = int(current_line[1])
+			elif current_line[0] == "Range":
+				shoot_range = int(current_line[1])
+			elif current_line[0] == "Reload_time":
+				reload_time = int(current_line[1])
+			elif current_line[0] == "Build_time":
+				build_time = int(current_line[1])
+
+			if None not in (tower_type, damage, shoot_range, reload_time, build_time):
+				tower = Tower(tower_type, damage, shoot_range, reload_time, build_time, game)
+				game.add_tower_type(tower_type, tower)
+				return
 
 	def load_enemy(self, file, game):
 		enemy_type, name, hitpoints, armour, speed, worth = (None,) * 6
@@ -192,6 +213,9 @@ class Setup(object):
 
 				elif current_information[0] == "#Enemy":
 					self.load_enemy(file, game)
+
+				elif current_information[0] == "#Tower":
+					self.load_tower(file, game)
 
 				elif current_information[0] == "#Missile":
 					self.load_missile(file, game)
