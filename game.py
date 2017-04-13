@@ -3,13 +3,14 @@ from board import Board
 class Game():
 
 	def __init__ (self):
-		self.money = 0
-		self.points = 0
-		self.lives = 0
+		self.money = 0				# Integer to store the information of the player's money
+		self.points = 0				# Integer to store the information of the player's points
+		self.lives = 0				# Integer to store the information of the player's lives
+		self.current_wave = 0		# Integer to store the information of the current wave
 		self.routes = []			# Container for different routes (E.g. Easy, Medium, Hard)
 
-		self.tower_types = {}		# Dictionary for different towers
 		self.enemy_types = {}		# Dictionary for different enemies
+		self.tower_types = {}		# Dictionary for different towers
 		self.missile_types = {}		# Dictionary for different missiles
 
 
@@ -30,6 +31,14 @@ class Game():
 	# Adds enemy's type and the enemy itself to the enemy_types dictionary
 	def add_enemy_type(self, type_name, enemy):
 		self.enemy_types[type_name] = enemy
+
+	# As add_enemy_type(), adds tower's type and the tower itself to the tower_types dictionary
+	def add_tower_type(self, type_name, tower):
+		self.tower_types[type_name] = tower
+
+	# As add_tower_type(), adds missiles type and the missile itself to the missile_types dictionary
+	def add_missile_type(self, type_name, missile):
+		self.missile_types[type_name] = missile
 
 
 	def add_route(self, route_name, route_points):

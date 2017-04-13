@@ -15,8 +15,8 @@ class Board(object):
 				self.squares[i][j] = Square()
 
 		# Containers
-		self.towers = []
 		self.enemies = []
+		self.towers = []
 		self.missiles = []
 		self.route_points = []		# Container for route points
 		self.waves = []				# Container for different waves
@@ -65,7 +65,7 @@ class Board(object):
 			print("CANNOT ADD")													#----------------------- NOT IMPLEMENTED
 
 
-	def add_missile_type(self, missile):
+	def add_missile_type(self, missile):	# Adds missile to the board
 		self.missiles.append(missile)
 
 
