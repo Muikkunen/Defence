@@ -1,4 +1,5 @@
 import coordinates
+from missile import Missile
 
 class Tower(object):
 	FIRST = 0
@@ -102,6 +103,11 @@ class Tower(object):
 
 
 	def shoot(self, target):
+		missile = game.get_missile_types()[self.type]	# Find 
+		missile.initialize(target, self.damage)
+
+		game.get_board().add_missile
+
 		missile = Missile(target)
 		game.get_board().add_missile(missile)
 
