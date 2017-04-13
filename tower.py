@@ -7,14 +7,34 @@ class Tower(object):
 	WEAKEST = 3
 
 
-	def __init__ (self, location, damage, shoot_range, relay_time, build_time, game):
-		self.location = location
+	def __init__ (self, tower_type, damage, shoot_range, reload_time, build_time, game):
+		self.type = tower_type
 		self.damage = damage
 		self.shoot_range = shoot_range
-		self.relay_time = relay_time
+		self.reload_time = reload_time
 		self.build_time = build_time
 		self.game = game
 		self.target_type = Tower.FIRST 				# As default the Tower shoots the enemy that is first released
+
+
+	def get_type(self):
+		return self.type
+
+	def get_damage(self):
+		return self.damage
+
+	def get_shoot_range(self):
+		return self.shoot_range
+
+	def get_reload_time(self):
+		return self.reload_time
+
+	def get_build_time(self):
+		return self.build_time
+
+	def get_target_type(self):
+		return self.target_type
+
 
 	# Tower shoots according to the specified target
 	def select_target(self):
@@ -84,3 +104,7 @@ class Tower(object):
 	def shoot(self, target):
 		missile = Missile(target)
 		game.get_board().add_missile(missile)
+
+
+	def set_location(self, location):
+		self.location = location
