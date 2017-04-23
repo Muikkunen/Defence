@@ -24,5 +24,5 @@ class Square(object):
 			return False
 
 	def contains(self):
-		# Returns Square type (EMPTY = 0, ROUTE = 1 or TOWER = 2) 
+		# Returns Square's type (EMPTY = 0, ROUTE = 1 or TOWER = 2) 
 		return self._type

@@ -14,6 +14,32 @@ class Game():
 		self.missile_types = {}		# Dictionary for different missiles
 
 
+	# Game's getters
+	def get_money(self):
+		return self.money
+
+	def get_points(self):
+		return self.points
+
+	def get_lives(self):
+		return self.lives
+
+	def get_board(self):
+		return self.board
+
+	def get_enemy_types(self):
+		return self.enemy_types
+
+	def get_tower_types(self):
+		return self.tower_types
+
+	def get_missile_types(self):
+		return self.missile_types
+
+	def get_route_points(self):
+		return self.route_points
+
+
 	def check_dead_enemies(self):
 		for enemy in self.board.get_enemies():
 
@@ -66,35 +92,3 @@ class Game():
 
 	def set_board(self, board):
 		self.board = board
-
-
-
-
-	def get_money(self):
-		return self.money
-
-	def get_points(self):
-		return self.points
-
-	def get_lives(self):
-		return self.lives
-
-	def get_board(self):
-		return self.board
-
-	def get_enemy_types(self):
-		return self.enemy_types
-
-	def get_tower_types(self):
-		return self.tower_types
-
-	def get_missile_types(self):
-		return self.missile_types
-
-	def get_route_points(self):
-		return self.route_points
-
-
-	"""money = property(set_money, get_money)
-	points = property(get_points)
-	lives = property(get_lives)"""

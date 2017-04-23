@@ -2,7 +2,7 @@ from io import StringIO
 
 from game import Game
 from board import Board
-from enemy import Enemy
+#from enemy import Enemy
 from tower import Tower
 from missile import Missile
 
@@ -84,12 +84,12 @@ class Setup(object):
 				speed = int(current_line[1])
 
 			if None not in (missile_type, speed):
-				missile = Missile(missile_type, speed)
-				game.add_missile_type(missile_type, missile)
+				missile_information = [missile_type, speed]
+				game.add_missile_type(missile_type, missile_information)
 				return
 
 	def load_tower(self, file, game):
-		tower_type, damage, shoot_range, reload_time, build_time = (None,) * 5
+		tower_type, damage, shoot_range, reload_time, build_time, sound_effect = (None,) * 6
 
 		while True:
 			current_line = self.get_current_information(file)
@@ -104,10 +104,13 @@ class Setup(object):
 				reload_time = int(current_line[1])
 			elif current_line[0] == "Build_time":
 				build_time = int(current_line[1])
+			elif current_line[0] == "Sound_effect":
+				sound_effect = current_line[1]
 
-			if None not in (tower_type, damage, shoot_range, reload_time, build_time):
-				tower = Tower(tower_type, damage, shoot_range, reload_time, build_time, game)
-				game.add_tower_type(tower_type, tower)
+
+			if None not in (tower_type, damage, shoot_range, reload_time, build_time, sound_effect):
+				tower_information = [tower_type, damage, shoot_range, reload_time, build_time, sound_effect, game]
+				game.add_tower_type(tower_type, tower_information)
 				return
 
 	def load_enemy(self, file, game):
@@ -130,8 +133,8 @@ class Setup(object):
 				worth = int(current_line[1])
 
 			if None not in (enemy_type, name, hitpoints, armour, speed, worth, game):
-				enemy = Enemy(enemy_type, name, hitpoints, armour, speed, worth, game)
-				game.add_enemy_type(enemy_type, enemy)	
+				enemy_information = [enemy_type, name, hitpoints, armour, speed, worth, game]
+				game.add_enemy_type(enemy_type, enemy_information)
 				return
 
 
@@ -161,7 +164,7 @@ class Setup(object):
 
 	def load_board(self, file):
 		# Set up variables for board measurements
-		width, height = None, None
+		width, height, square_size = (None,) * 3
 
 		while True:
 			current_line = self.get_current_information(file)
@@ -171,10 +174,12 @@ class Setup(object):
 				width = int(current_line[1])
 			elif current_line[0] == "Height":
 				height = int(current_line[1])
+			elif current_line[0] == "Square_size":
+				square_size = int(current_line[1])
 
 			# Examine whether width and height have been found
-			if width != None and height != None:
-				return Board(width, height)
+			if None not in (width, height, square_size):
+				return Board(width, height, square_size)
 
 
 	def load_game(self, file, game):

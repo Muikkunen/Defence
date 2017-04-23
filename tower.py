@@ -1,5 +1,10 @@
-import coordinates
+from coordinates import distance
 from missile import Missile
+
+from PyQt5 import QtCore
+#from PyQt5.QtCore import QUrl
+from PyQt5.QtMultimedia import QSound
+
 
 class Tower(object):
 	FIRST = 0
@@ -8,14 +13,27 @@ class Tower(object):
 	WEAKEST = 3
 
 
-	def __init__ (self, tower_type, damage, shoot_range, reload_time, build_time, game):
-		self.type = tower_type
-		self.damage = damage
-		self.shoot_range = shoot_range
-		self.reload_time = reload_time
-		self.build_time = build_time
-		self.game = game
-		self.target_type = Tower.FIRST 				# As default the Tower shoots the enemy that is first released
+	#def __init__ (self, tower_type, damage, shoot_range, reload_time, build_time, sound_effect, game):
+
+	def __init__ (self, tower_information):	
+		self.type = tower_information[0]
+		self.damage = tower_information[1]
+		self.shoot_range = tower_information[2]
+		self.reload_time = tower_information[3]
+		self.build_time = tower_information[4]
+		#self.sound_effect = QSound(sound_effect)
+		self.game = tower_information[6]
+		self.target_type = Tower.FIRST 					# As default the tower shoots the enemy that is first released
+		self.location = None							# Location will be set when player puts the tower to the board
+														# 	it defines the coordinates where the Tower is
+		self.reloading = False							# Indicate whether the tower is reloading or not
+		self.reload_timer = QtCore.QTimer()				# Timer to keep on track the reloading time
+
+		self.building = True 							# Indicate whether the tower is still building or not
+		self.build_timer = QtCore.QTimer()				# Timer to measure tower building
+		self.build_timer.setSingleShot(True)			# Set timer to measure time only once since tower will be built only once
+		self.reload_timer.start(self.build_time)		# Start timer for building
+		self.build_timer.timeout.connect(self.build)
 
 
 	def get_type(self):
@@ -36,6 +54,12 @@ class Tower(object):
 	def get_target_type(self):
 		return self.target_type
 
+	def get_location(self):
+		return self.location
+
+	def get_building(self):
+		return self.building
+
 
 	# Tower shoots according to the specified target
 	def select_target(self):
@@ -43,27 +67,30 @@ class Tower(object):
 
 		# Find enemies that the Tower is able to shoot
 		for enemy in self.game.get_board().get_enemies():
-			if distance(self.location, enemy.get_location()) <= self.range:
+			#print("Enemy location: {}".format(enemy.get_location()))			#------------------------------------------------------------------
+			#print("Tower location: {}".format(self.location))					#------------------------------------------------------------------
+			if distance(self.location, enemy.get_location()) <= self.shoot_range:
 				enemies_in_range.append(enemy)
+		
 
-		if enemies_in_range == []:					# Tower does not shoot, because zero enemies are in range
+		if enemies_in_range == []:								# Tower does not shoot, because zero enemies are in range
 			return
 
-		if self.target_type == Tower.FIRST:			# Tower shoots the first enemy in its range
-			self.shoot_first_enemy(enemies_in_range)
-		elif self.target_type == Tower.CLOSEST:		# Tower shoots the enemy to which the distance is shortest
-			self.shoot_closest_enemy(enemies_in_range)
-		elif self.target_type == Tower.STRONGEST:	# Tower shoots the strongest enemy in its range
-			self.shoot_strongest_enemy(enemies_in_range)
-		elif self.target_type == Tower.WEAKEST:		# Tower shoots the weakest enemy in its range
-			self.shoot_weakest_enemy(enemies_in_range)
+		if self.target_type == Tower.FIRST:						# Tower shoots the first enemy in its range
+			return self.shoot_first_enemy(enemies_in_range)
+		elif self.target_type == Tower.CLOSEST:					# Tower shoots the enemy to which the distance is shortest
+			return self.shoot_closest_enemy(enemies_in_range)
+		elif self.target_type == Tower.STRONGEST:				# Tower shoots the strongest enemy in its range
+			return self.shoot_strongest_enemy(enemies_in_range)
+		elif self.target_type == Tower.WEAKEST:					# Tower shoots the weakest enemy in its range
+			return self.shoot_weakest_enemy(enemies_in_range)
 
 
-	def first_enemy(self, enemies):
-		self.shoot(enemies[0])
+	def shoot_first_enemy(self, enemies):
+		return enemies[0]
 
 
-	def closest_enemy(self, enemies):
+	def shoot_closest_enemy(self, enemies):
 		distance_to_selected_enemy = None	# Set variable for shortest distance
 		enemy_to_be_shot = enemies[0]		# Set variable to store the Enemy with shortest distance to Tower
 
@@ -77,7 +104,7 @@ class Tower(object):
 				distance_to_selected_enemy = distance_to_current_enemy
 				enemy_to_be_shot = enemy
 
-		self.shoot(enemy_to_be_shot)
+		return enemy_to_be_shot
 
 	# See the method closest_enemy() for details of this method
 	def shoot_strongest_enemy(self, enemies):
@@ -88,7 +115,7 @@ class Tower(object):
 			if enemy_to_be_shot.get_hitpoints() < enemy.get_hitpoints():
 				enemy_to_be_shot = enemy
 
-		self.shoot(enemy_to_be_shot)
+		return enemy_to_be_shot
 
 	# See the method closest_enemy() for details of this method
 	def shoot_weakest_enemy(self, enemies):
@@ -99,18 +126,35 @@ class Tower(object):
 			if enemy_to_be_shot.get_hitpoints() > enemy.get_hitpoints():
 				enemy_to_be_shot = enemy
 
-		self.shoot(enemy_to_be_shot)
+		return enemy_to_be_shot
 
 
-	def shoot(self, target):
-		missile = game.get_missile_types()[self.type]	# Find 
-		missile.initialize(target, self.damage)
+	def shoot(self):
+		if self.reloading:												# Tower does not shoot if it is reloading
+			return
 
-		game.get_board().add_missile
+		target = self.select_target()
+		if target == None:												# Tower does not shoot if zero enemies are in its range
+			return
 
-		missile = Missile(target)
-		game.get_board().add_missile(missile)
+		missile = Missile(self.game.get_missile_types()[self.type])		# Select the missile type from game's dictionary
+		missile.initialize(self, target)								# Initialize the missile's information; target and damage
+		self.game.get_board().add_missile(missile)						# Add missile to board
+
+		# Set reloading indicator to True to indicate that tower cannot shoot reloading time has passed
+		self.reloading = True
+		self.reload_timer.start(self.reload_time)						# Start reload_timer for reloading
+
+		# When reload_timer has finished, change indicator value to False to indicate that the tower can shoot again
+		self.reload_timer.timeout.connect(self.stop_reloading)
+		#self.sound_effect.play()
+
+	def stop_reloading(self):
+		self.reloading = False
 
 
 	def set_location(self, location):
 		self.location = location
+
+	def build(self):
+		self.building = False

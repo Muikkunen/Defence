@@ -1,6 +1,9 @@
 Defence 1.0 Game data
 
 ---Comments---
+Types are also hard coded, meaning that they shouldn't be changed
+  nor could one create new types without editing the actual code.
+
 Data storage still on planning phase.
 
 Information blocks are highlighted with "---".
@@ -23,28 +26,29 @@ Lives		10
 
 ---Board size---
 #Board		
-Width		100
-Height		50
+Width		38
+Height		24
+Square_size	50
 
 
 ---Routes--- ---Should be after Board size---
 #Route
-0		12
-32		12
-32		37
-65		37
-65		12
-99		12
-Name		Easy
+0		18
+20		18
+20		8
+30		8
+30		18
+37		18
+Name		Medium
 
 #Route
-0		37
-32		37
-32		12
-65		12
-65		37
-99		37
-Name		Medium
+0		8
+7		8
+7		18
+30		18
+30		8
+37		8
+Name		Easy
 
 ---Enemies---
 #Enemy
@@ -52,7 +56,7 @@ Type		KILLER1
 Name		Name_KILLER1 Should enemy have a name?
 Hitpoints	100
 Armour		0
-Speed		5
+Speed		1
 Worth		50
 
 #Enemy
@@ -60,7 +64,7 @@ Type		KILLER2
 Name		Name_KILLER2 Should enemy have a name?
 Hitpoints	200
 Armour		0
-Speed		10
+Speed		3
 Worth		100
 
 ---Towers---
@@ -68,14 +72,26 @@ Worth		100
 Type		Rocket
 Damage		5
 Range		100
-Reload_time	10
-Build_time	10
+Reload_time	500
+Build_time	100
+Sound_effect	gun-gunshot-01.wav
 
+#Tower
+Type		Cannon
+Damage		100
+Range		200
+Reload_time	1000
+Build_time	80
+Sound_effect	gun-gunshot-01.wav
 
 ---Missiles---
 #Missile
 Type		Rocket
-Speed		50
+Speed		3
+
+#Missile
+Type		Cannon
+Speed		10
 
 
 ---Waves---
