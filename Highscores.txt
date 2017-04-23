@@ -1,8 +1,0 @@
----Highscores---
-#1
-Name		Challenge 1
-Level		37
-
-#2
-Name		Challenge 2
-Level

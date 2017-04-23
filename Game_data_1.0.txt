@@ -27,7 +27,7 @@ Lives		10
 ---Board size---
 #Board		
 Width		38
-Height		24
+Height		21
 Square_size	50
 
 
@@ -70,7 +70,7 @@ Worth		100
 ---Towers---
 #Tower
 Type		Rocket
-Damage		5
+Damage		50
 Range		100
 Reload_time	500
 Build_time	100
@@ -81,7 +81,7 @@ Type		Cannon
 Damage		100
 Range		200
 Reload_time	1000
-Build_time	80
+Build_time	2500
 Sound_effect	gun-gunshot-01.wav
 
 ---Missiles---
