@@ -32,8 +32,6 @@ class Tower(object):
 		self.building = True 							# Indicate whether the tower is still building or not
 		self.build_timer = QtCore.QTimer()				# Timer to measure tower building
 		self.build_timer.setSingleShot(True)			# Set timer to measure time only once since tower will be built only once
-		self.reload_timer.start(self.build_time)		# Start timer for building
-		self.build_timer.timeout.connect(self.build)
 
 
 	def get_type(self):
@@ -67,8 +65,6 @@ class Tower(object):
 
 		# Find enemies that the Tower is able to shoot
 		for enemy in self.game.get_board().get_enemies():
-			#print("Enemy location: {}".format(enemy.get_location()))			#------------------------------------------------------------------
-			#print("Tower location: {}".format(self.location))					#------------------------------------------------------------------
 			if distance(self.location, enemy.get_location()) <= self.shoot_range:
 				enemies_in_range.append(enemy)
 		
@@ -130,12 +126,12 @@ class Tower(object):
 
 
 	def shoot(self):
-		if self.reloading:												# Tower does not shoot if it is reloading
+		if self.reloading or self.building:								# Tower does not shoot if it is reloading or building
 			return
 
 		target = self.select_target()
 		if target == None:												# Tower does not shoot if zero enemies are in its range
-			return
+			return None													# Return None to indicate that a missile was not created
 
 		missile = Missile(self.game.get_missile_types()[self.type])		# Select the missile type from game's dictionary
 		missile.initialize(self, target)								# Initialize the missile's information; target and damage
@@ -149,12 +145,19 @@ class Tower(object):
 		self.reload_timer.timeout.connect(self.stop_reloading)
 		#self.sound_effect.play()
 
+		return missile 													# Return the created missile
+
 	def stop_reloading(self):
 		self.reloading = False
 
 
 	def set_location(self, location):
 		self.location = location
+
+		# When tower is placed on the board, start timer to measure when tower is built and therefore ready to shoot
+		self.build_timer.start(self.build_time)
+		self.build_timer.timeout.connect(self.build)
+		
 
 	def build(self):
 		self.building = False

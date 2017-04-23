@@ -133,8 +133,8 @@ class Enemy(object):
 	def reduce_hitpoints(self, damage):
 
 		# If enemy's armour is greater than the damage, do nothing
-		if damage < armour:
+		if damage < self.armour:
 			return
 
-		self.hitpoints -= (damage - armour)
+		self.hitpoints -= (damage - self.armour)
 		return

@@ -37,6 +37,13 @@ class GUI(QtWidgets.QMainWindow):
 
 
 	def add_all_graphics(self):
+		# REMOVE THESE 3 -----------------------------------------------------------
+		cannon = self.game.get_tower_types()["Cannon"]
+		position = [10, 10]
+		self.game.get_board().add_tower(cannon, position)
+		#---------------------------------------------------------------
+
+
 		self.add_enemy_graphics_items()
 		self.add_tower_graphics_items()
 		#self.add_missiles_graphics_items()
@@ -75,7 +82,6 @@ class GUI(QtWidgets.QMainWindow):
 
 
 	def update_all(self):
-		#print(self.game.get_board().get_missiles())
 		self.update_enemies()										# Firstly the enemies move
 		self.update_towers(self.game.get_board().get_towers())		# Then  the towers shoot according to their targets
 		self.update_missiles(self.game.get_board().get_missiles())	# Lastly the missiles that were created as well as the previously created ones move
@@ -88,7 +94,15 @@ class GUI(QtWidgets.QMainWindow):
 			enemy_graphics_item.update_graphics()
 
 	def update_towers(self, towers):
-		towers[:] = [tower for tower in towers if not tower.shoot()]
+		#towers[:] = [tower for tower in towers if not tower.shoot()]
+
+		for tower in towers:
+			missile = tower.shoot()
+			if missile != None:
+				missile_graphics_item = MissileGraphicsItem(missile, self.game.get_board().get_square_size())
+				self.missile_graphics_items.append(missile_graphics_item)
+				self.scene.addItem(missile_graphics_item)
+
 
 		for tower_graphics_item in self.tower_graphics_items:
 			tower_graphics_item.update_graphics()
@@ -101,16 +115,19 @@ class GUI(QtWidgets.QMainWindow):
 
 
 	def init_window(self):
-		self.setGeometry(100, 100, 1820, 1100)#----------------------------------------------IMPLEMENT TO READ VALUES FROM PLAYERS WINDOW
+		self.showFullScreen()
+		self.showMaximized()
+		#self.setGeometry(100, 50, 20, 1300)#----------------------------------------------IMPLEMENT TO READ VALUES FROM PLAYERS WINDOW
 		self.setWindowTitle("Defence")
 		self.show()
 
 		# Add a scene for drawing 2d objects------------------------------------------------------------REMOVE
 		self.scene = QtWidgets.QGraphicsScene()
-		self.scene.setSceneRect(0, 0, 1720, 1000)
+		#self.scene.setSceneRect(0, 0, 2736, 1824)
+		self.scene.setSceneRect(0, 0, 1900, 1050)
 
 		# Add a view for showing the scene------------------------------------------------------------REMOVE
 		self.view = QtWidgets.QGraphicsView(self.scene, self)
-		self.view.adjustSize()
+		#self.view.adjustSize()
 		self.view.show()
 		self.horizontal.addWidget(self.view)

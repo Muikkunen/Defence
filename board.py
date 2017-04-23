@@ -101,7 +101,7 @@ class Board(object):
 				print("Cannot add Tower to the Board")
 
 		except IndexError:
-			print("Tower cannot be added because the specified Square is outside the board")
+			print("Tower cannot be added because the specified Square is outside of the board")
 
 
 	def add_missile(self, missile):	# Adds missile to the board

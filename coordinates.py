@@ -15,5 +15,8 @@ def new_location(current_location, target_location, speed):
 	vector_length = (vector[0]**2 + vector[1]**2)**(0.5)					# Calculate the vector's length
 	unit_vector = [vector[0] / vector_length, vector[1] / vector_length]	# Calculate a unit vector
 
-	new_location = [i * speed for i in unit_vector]							# Calculate the new coordinates to which the object should move
+	transition = [i * speed for i in unit_vector]							# Calculate the transition
+
+	# Calculate the new coordinates to which the object should move by summing the transition vector to current location
+	new_location = [current_location[0] + transition[0], current_location[1] + transition[1]]
 	return new_location

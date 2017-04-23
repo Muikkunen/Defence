@@ -79,11 +79,7 @@ def main():
 
 	#print(game.get_tower_types())
 
-	cannon = game.get_tower_types()["Cannon"]
-	#enemy = game.get_enemy_types()["KILLER1"]
 
-	position = [10, 10]
-	game.get_board().add_tower(cannon, position)
 
 	
 	#print(game.get_board().get_towers()[0].get_location())
@@ -98,7 +94,7 @@ def main():
 	board.add_enemy(Enemy(game.get_enemy_types()["KILLER1"]), list(game.get_board().get_route_points()[0]))
 	board.add_enemy(Enemy(game.get_enemy_types()["KILLER2"]), list(game.get_board().get_route_points()[0]))
 
-	game.get_board().get_towers()[0].shoot()
+	#game.get_board().get_towers()[0].shoot()
 
 	#print("Missiles: {}".format(game.get_board().get_missiles()))
 

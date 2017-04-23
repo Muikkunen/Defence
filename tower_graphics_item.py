@@ -60,7 +60,6 @@ class TowerGraphicsItem(QtWidgets.QGraphicsPolygonItem):
 		else:
 			color = QtGui.QColor(0, 255, 0)
 
-		print("asdf")
 		
 		brush = QtGui.QBrush(1)
 
@@ -69,5 +68,5 @@ class TowerGraphicsItem(QtWidgets.QGraphicsPolygonItem):
 		self.setBrush(brush)
 
 
-	"""def mousePressEvent(self, *args, **kwargs):
-		self.robot.fix()"""
+	def mousePressEvent(self, *args, **kwargs):
+		print("Tornin klikkaus toimii!")

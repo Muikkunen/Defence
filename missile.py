@@ -7,7 +7,7 @@ class Missile(object):
 	def __init__ (self, missile_information):
 		if missile_information[0] in ["Cannon"]:			# If type is defined here, the missile moves to the point where the enemy was when it was shot
 			self.static_target = True
-		elif missile_information[0] in ["Rocket"]:		# If type is defined here, the missile moves towards the enemy
+		elif missile_information[0] in ["Rocket"]:			# If type is defined here, the missile moves towards the enemy
 			self.static_target = False
 		else:									# If neither case is true, the type of the missile is not defined here and should be added
 			raise SystemExit(missile_type + " is a type of missile that is not "\
@@ -18,21 +18,26 @@ class Missile(object):
 
 		self.damage = None
 		self.location = None
+		self.target = None
 
 
 	def get_damage(self):
 		return self.damage
 
+	def get_location(self):
+		return self.location
 
-	def initialize(self, tower, target):		# Set the target, location and damage for missile
-		self.location = tower.get_location()	# Set missile's location according to the location of the tower that created it
 
-		# Missile either moves to a specified location or changes its destination on every update
-		#	according to whether the static_target value is True or False
+	def initialize(self, tower, target):
+		self.location = tower.get_location()			# Set missile's location according to the location of the tower that created it
+		self.target = target 							# Set missile's target to the enemy to which it was shot
+		self.target_location = target.get_location()	# Set missile's target location to the enemy's current location, see also function move()
+		
+		"""
 		if self.static_target:
-			self.target = target.get_location()	# Target will not change even if the target enemy moves
+			self.target_location = target.get_location()	# Target will not change even if the target enemy moves
 		else:
-			self.target = target 				# Target will change when the target enemy moves
+			self.target = target 				# Target will change when the target enemy moves"""
 
 		self.damage = tower.get_damage() 		# Missile gets its damage from the tower that created it
 
@@ -43,14 +48,16 @@ class Missile(object):
 		if self.target == None:					# If target has been deleted, return True to indicate that the missile should be deleted
 			return True							#	---Might not work-----------
 
-		if self.static_target:					# If the specified target is static, move the missile towards to the point where the enemy was
-			target = self.target 				#	when missile was initialized
-		else:									# If the specified target is not static, move the target towards missile's target (enemy)
-			target = self.target.get_location()	
+		
+		# If the specified target is not static, move the missile towards its target (enemy)
+		# 	otherwise move towards to the previously defined point where the enemy was when missile was initialized
+		if not self.static_target:
+			self.target_location = self.target.get_location()
 
-		if distance(self.location, target) <= self.speed:
+
+		if distance(self.location, self.target_location) <= self.speed:
 			self.target.reduce_hitpoints(self.damage)
 			return True 						# Return True to indicate that the missile has hit its target and should be deleted
 		
 
-		self.location = new_location(self.location, target, self.speed)
+		self.location = new_location(self.location, self.target_location, self.speed)
