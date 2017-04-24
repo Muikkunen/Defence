@@ -26,28 +26,28 @@ Lives		10
 
 ---Board size---
 #Board		
-Width		38
-Height		21
-Square_size	50
+Width		30
+Height		16
+Square_size	64
 
 
 ---Routes--- ---Should be after Board size---
 #Route
-0		18
-20		18
-20		8
-30		8
-30		18
-37		18
+0		9
+10		9
+10		8
+15		8
+15		9
+29		9
 Name		Medium
 
 #Route
-0		8
-7		8
-7		18
-30		18
-30		8
-37		8
+0		2
+4		2
+4		9
+12		9
+12		2
+29		2
 Name		Easy
 
 ---Enemies---
@@ -70,28 +70,28 @@ Worth		100
 ---Towers---
 #Tower
 Type		Rocket
-Damage		50
-Range		100
-Reload_time	500
+Damage		20
+Range		1000
+Reload_time	1000
 Build_time	100
 Sound_effect	gun-gunshot-01.wav
 
 #Tower
 Type		Cannon
 Damage		100
-Range		200
+Range		2000
 Reload_time	1000
-Build_time	2500
+Build_time	250
 Sound_effect	gun-gunshot-01.wav
 
 ---Missiles---
 #Missile
 Type		Rocket
-Speed		3
+Speed		10
 
 #Missile
 Type		Cannon
-Speed		10
+Speed		5
 
 
 ---Waves---
