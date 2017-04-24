@@ -12,10 +12,14 @@ class Enemy(object):
 		self.speed = enemy_information[4]
 		self.worth = enemy_information[5]
 		self.game = enemy_information[6]
-		self.location = None
-		self.destination = None
+		self.location = None						# When initialized, enemy's current location has not been set
+		self.destination = None						# When initialized, enemy does not have destination
+		self.degrees = None 						# Therefore enemy lacks also the direction to which it is going
 
-	# Next six methods will return the Enemy class's data
+	# Next methods will return the Enemy class's data
+	def get_type(self):
+		return self.enemy_type
+
 	def get_hitpoints(self):
 		return self.hitpoints
 
@@ -25,9 +29,6 @@ class Enemy(object):
 	def get_speed(self):
 		return self.speed
 
-	def get_type(self):
-		return self.enemy_type
-
 	def get_worth(self):
 		return self.worth
 
@@ -36,6 +37,9 @@ class Enemy(object):
 
 	def get_location(self):
 		return self.location
+
+	def get_degrees(self):
+		return self.degrees
 
 
 	def set_location(self, location):
@@ -56,6 +60,7 @@ class Enemy(object):
 		if self.destination == None:
 			self.set_next_destination()
 
+		"""
 		# If the enemy should move vertically, set first_indicator to 0 and if horizontally, set it to 1
 		if self.location[0] == self.destination[0]:
 			first_indicator = 1
@@ -67,7 +72,7 @@ class Enemy(object):
 		if self.location[first_indicator] < self.destination[first_indicator]:
 			second_indicator = 1
 		else:
-			second_indicator = -1
+			second_indicator = -1"""
 
 		# Calculate the remaining distance between the current position and the next destination
 		remaining_distance = distance(self.location, self.destination)
@@ -80,15 +85,20 @@ class Enemy(object):
 			# Set the next destination, if the set_next_destination() function returns True, Enemy has reached its goal
 			if self.set_next_destination():
 
-				
 				# If Enemy has reached its goal, function returns True to indicate that the Enemy should be killed
 				return True
 
 			self.move(speed - remaining_distance)		# Call function again to move remaining amount of the speed
 			return False								# Enemy is still alive
 
+		self.location = new_location(self.location, self.destination, self.speed)
+		self.degrees = direction(self.location, self.destination, self.degrees)		# Calculate the direction to which the enemy is going to
+
 		# Finally actually move the enemy and convert to int to avoid decimal numbers which occur due to multiplying with -1
-		self.location[first_indicator] += int(speed * (second_indicator))
+		#self.location[first_indicator] += int(speed * (second_indicator))
+
+		#print("Enemy's location: {}".format(self.location))
+		#print("Enemy's hitpoints: {}".format(self.hitpoints))
 
 
 	def set_next_destination(self):
@@ -123,7 +133,10 @@ class Enemy(object):
 
 	# Returns boolean value whether the enemy is dead (True) or not (False)
 	def is_dead(self):
-		if hitpoints <= 0:
+		if self.hitpoints <= 0:
+			# Increase player's money and points by enemy's worth
+			self.game.increase_money(self.worth)
+			self.game.increase_points(self.worth)
 			return True
 		else:
 			return False

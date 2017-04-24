@@ -1,4 +1,40 @@
 from PyQt5 import QtWidgets, QtGui, QtCore
+from PyQt5.QtGui import QPixmap
+
+class MissileGraphicsItem(QtWidgets.QGraphicsPixmapItem):
+
+	def __init__(self, missile, square_size):
+		# Call init of the parent object
+		super(MissileGraphicsItem, self).__init__()
+		self.setPixmap(QPixmap("images/Missile_1.png"))
+
+		self.missile = missile
+		self.update_graphics()
+
+
+	def get_missile(self):
+		return self.missile
+
+
+	def update_graphics(self):
+		self.updatePosition()
+		self.updateRotation()
+
+	def updatePosition(self):
+		location = self.missile.get_location()
+		self.setPos(location[0], location[1])
+
+
+	def updateRotation(self):
+		rotation = self.missile.get_degrees()
+
+		if rotation != None:
+			self.setRotation(self.missile.get_degrees())
+
+
+
+
+"""from PyQt5 import QtWidgets, QtGui, QtCore
 
 class MissileGraphicsItem(QtWidgets.QGraphicsPolygonItem):
 	'''
@@ -60,8 +96,8 @@ class MissileGraphicsItem(QtWidgets.QGraphicsPolygonItem):
 
 		brush.setColor(color)
 	
-		self.setBrush(brush)
+		self.setBrush(brush)"""
 
 
-	"""def mousePressEvent(self, *args, **kwargs):
+"""	def mousePressEvent(self, *args, **kwargs):
 		self.robot.fix()"""

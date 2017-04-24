@@ -1,5 +1,6 @@
 from coordinates import *
 
+
 class Missile(object):
 
 	#def __init__ (self, missile_type, speed):
@@ -19,7 +20,9 @@ class Missile(object):
 		self.damage = None
 		self.location = None
 		self.target = None
+		self.target_location = []
 
+		self.degrees = None
 
 	def get_damage(self):
 		return self.damage
@@ -27,12 +30,15 @@ class Missile(object):
 	def get_location(self):
 		return self.location
 
+	def get_degrees(self):
+		return self.degrees
+
 
 	def initialize(self, tower, target):
 		self.location = tower.get_location()			# Set missile's location according to the location of the tower that created it
 		self.target = target 							# Set missile's target to the enemy to which it was shot
-		self.target_location = target.get_location()	# Set missile's target location to the enemy's current location, see also function move()
-		
+		self.target_location[:] = target.get_location()	# Set missile's target location to the enemy's current location, see also function move()
+
 		"""
 		if self.static_target:
 			self.target_location = target.get_location()	# Target will not change even if the target enemy moves
@@ -48,16 +54,17 @@ class Missile(object):
 		if self.target == None:					# If target has been deleted, return True to indicate that the missile should be deleted
 			return True							#	---Might not work-----------
 
-		
+
 		# If the specified target is not static, move the missile towards its target (enemy)
 		# 	otherwise move towards to the previously defined point where the enemy was when missile was initialized
 		if not self.static_target:
 			self.target_location = self.target.get_location()
 
-
+		# Calculate the distance between missile and target
 		if distance(self.location, self.target_location) <= self.speed:
 			self.target.reduce_hitpoints(self.damage)
+			print("Target's location when it hits: {}".format(self.location))
 			return True 						# Return True to indicate that the missile has hit its target and should be deleted
-		
 
 		self.location = new_location(self.location, self.target_location, self.speed)
+		self.degrees = direction(self.location, self.target_location, self.degrees)

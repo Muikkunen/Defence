@@ -82,9 +82,15 @@ class Game():
 			print("Game over")
 
 
+	def increase_money(self, money):		# When enemy is killed, increase player's money
+		self.money += money
+
+	def increase_points(self, points):		# When enemy is killed, increase player's points
+		self.points += points
+
+
 	def set_money(self, money):
 		self.money = money
-
 
 	def set_lives(self, lives):
 		self.lives = lives

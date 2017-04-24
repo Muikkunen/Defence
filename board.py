@@ -88,7 +88,7 @@ class Board(object):
 
 				# Calculate the tower's position so that the tower's location is in the middle of a square
 				x_coordinate = position[0] * self.square_size + (self.square_size / 2)
-				y_coordinate = position[0] * self.square_size + (self.square_size / 2)
+				y_coordinate = position[1] * self.square_size + (self.square_size / 2)
 
 				tower = Tower(tower_information)
 				tower.set_location([x_coordinate, y_coordinate])
@@ -104,7 +104,7 @@ class Board(object):
 			print("Tower cannot be added because the specified Square is outside of the board")
 
 
-	def add_missile(self, missile):	# Adds missile to the board
+	def add_missile(self, missile):				# Adds missile to the board
 		self.missiles.append(missile)
 
 
