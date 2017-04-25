@@ -47,9 +47,11 @@ class GUI(QtWidgets.QMainWindow):
 
 		# REMOVE THESE: -----------------------------------------------------------
 		rocket = self.game.get_tower_types()["Rocket"]
-		position = [10, 5]
-		self.game.get_board().add_tower(rocket, position)
-
+		cannon = self.game.get_tower_types()["Cannon"]
+		position1 = [10, 5]
+		position2 = [13, 5]
+		self.game.get_board().add_tower(rocket, position1)
+		self.game.get_board().add_tower(cannon, position2)
 		"""cannon = self.game.get_tower_types()["Cannon"]
 		position = [10, 10]
 		self.game.get_board().add_tower(cannon, position)"""

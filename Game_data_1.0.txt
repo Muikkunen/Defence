@@ -47,6 +47,10 @@ Name		Medium
 4		9
 12		9
 12		2
+20		2
+20		9
+25		9
+25		2
 29		2
 Name		Easy
 
@@ -54,7 +58,7 @@ Name		Easy
 #Enemy
 Type		KILLER1
 Name		Name_KILLER1 Should enemy have a name?
-Hitpoints	100
+Hitpoints	1000
 Armour		0
 Speed		1
 Worth		50
@@ -62,7 +66,7 @@ Worth		50
 #Enemy
 Type		KILLER2
 Name		Name_KILLER2 Should enemy have a name?
-Hitpoints	200
+Hitpoints	2000
 Armour		0
 Speed		3
 Worth		100
@@ -91,7 +95,7 @@ Speed		10
 
 #Missile
 Type		Cannon
-Speed		5
+Speed		30
 
 
 ---Waves---

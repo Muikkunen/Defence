@@ -8,18 +8,20 @@ class EnemyGraphicsItem(QtWidgets.QGraphicsPixmapItem):
 		super(EnemyGraphicsItem, self).__init__()
 
 		self.enemy = enemy
+		self.square_size = square_size
 
 		if self.enemy.get_type() == "KILLER1":
 			self.setPixmap(QPixmap("images/Enemy_1.png"))
 		elif self.enemy.get_type() == "KILLER2":
 			self.setPixmap(QPixmap("images/Enemy_2.png"))
 
-		self.setTransformOriginPoint(square_size, square_size)
 
+		self.width = self.pixmap().width()
+		self.height = self.pixmap().height()
 
+		self.setTransformOriginPoint(self.width / 2, self.height / 2)
 
 		self.update_graphics()
-
 
 	def get_enemy(self):
 		return self.enemy
@@ -31,7 +33,7 @@ class EnemyGraphicsItem(QtWidgets.QGraphicsPixmapItem):
 
 	def updatePosition(self):
 		location = self.enemy.get_location()
-		self.setPos(location[0], location[1])
+		self.setPos(location[0] - ((self.width - self.square_size) / 2), location[1] - ((self.height - self.square_size) / 2))
 
 
 	def updateRotation(self):

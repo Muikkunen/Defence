@@ -1,4 +1,4 @@
-from coordinates import distance
+from coordinates import distance, direction
 from missile import Missile
 
 from PyQt5 import QtCore
@@ -23,7 +23,7 @@ class Tower(object):
 		self.build_time = tower_information[4]
 		#self.sound_effect = QSound(sound_effect)
 		self.game = tower_information[6]
-		self.target_type = Tower.FIRST 					# As default the tower shoots the enemy that is first released
+		self.target_type = Tower.STRONGEST				# As default the tower shoots the enemy that is first released
 		self.location = None							# Location will be set when player puts the tower to the board
 														# 	it defines the coordinates where the Tower is
 		self.reloading = False							# Indicate whether the tower is reloading or not
@@ -32,6 +32,9 @@ class Tower(object):
 		self.building = True 							# Indicate whether the tower is still building or not
 		self.build_timer = QtCore.QTimer()				# Timer to measure tower building
 		self.build_timer.setSingleShot(True)			# Set timer to measure time only once since tower will be built only once
+
+		self.degrees = None
+		self.target = None
 
 
 	def get_type(self):
@@ -57,6 +60,11 @@ class Tower(object):
 
 	def get_building(self):
 		return self.building
+
+	def get_degrees(self):
+		if self.degrees != None and self.location != None and self.target != None:
+			self.degrees = direction(self.location, self.target.get_location(), self.degrees)
+		return self.degrees
 
 
 	# Tower shoots according to the specified target
@@ -127,14 +135,14 @@ class Tower(object):
 
 	def shoot(self):
 		if self.reloading or self.building:								# Tower does not shoot if it is reloading or building
-			return
+			return			
 
-		target = self.select_target()
-		if target == None:												# Tower does not shoot if zero enemies are in its range
+		self.target = self.select_target()
+		if self.target == None:											# Tower does not shoot if zero enemies are in its range
 			return None													# Return None to indicate that a missile was not created
 
 		missile = Missile(self.game.get_missile_types()[self.type])		# Select the missile type from game's dictionary
-		missile.initialize(self, target)								# Initialize the missile's information; target and damage
+		missile.initialize(self, self.target)							# Initialize the missile's information; target and damage
 		self.game.get_board().add_missile(missile)						# Add missile to board
 
 		# Set reloading indicator to True to indicate that tower cannot shoot reloading time has passed
@@ -144,6 +152,8 @@ class Tower(object):
 		# When reload_timer has finished, change indicator value to False to indicate that the tower can shoot again
 		self.reload_timer.timeout.connect(self.stop_reloading)
 		#self.sound_effect.play()
+
+		self.degrees = direction(self.location, self.target.get_location(), self.degrees)		
 
 		return missile 													# Return the created missile
 

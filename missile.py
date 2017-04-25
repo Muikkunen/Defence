@@ -24,6 +24,9 @@ class Missile(object):
 
 		self.degrees = None
 
+	def get_type(self):
+		return self.type
+
 	def get_damage(self):
 		return self.damage
 
@@ -52,7 +55,7 @@ class Missile(object):
 	#	and the enemy has been deleted and False if otherwise
 	def move(self):
 		if self.target == None:					# If target has been deleted, return True to indicate that the missile should be deleted
-			return True							#	---Might not work-----------
+			return True
 
 
 		# If the specified target is not static, move the missile towards its target (enemy)
@@ -62,9 +65,13 @@ class Missile(object):
 
 		# Calculate the distance between missile and target
 		if distance(self.location, self.target_location) <= self.speed:
-			self.target.reduce_hitpoints(self.damage)
-			print("Target's location when it hits: {}".format(self.location))
-			return True 						# Return True to indicate that the missile has hit its target and should be deleted
+
+			if self.static_target:
+				print("draw explosion here")
+				return True 					# Return True to indicate that the missile has hit its target and should be deleted
+			else:
+				self.target.reduce_hitpoints(self.damage)
+				return True
 
 		self.location = new_location(self.location, self.target_location, self.speed)
 		self.degrees = direction(self.location, self.target_location, self.degrees)
