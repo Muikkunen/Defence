@@ -58,7 +58,7 @@ Name		Easy
 #Enemy
 Type		KILLER1
 Name		Name_KILLER1 Should enemy have a name?
-Hitpoints	1000
+Hitpoints	100
 Armour		0
 Speed		1
 Worth		50
@@ -66,9 +66,9 @@ Worth		50
 #Enemy
 Type		KILLER2
 Name		Name_KILLER2 Should enemy have a name?
-Hitpoints	2000
+Hitpoints	200
 Armour		0
-Speed		3
+Speed		5
 Worth		100
 
 ---Towers---
@@ -82,7 +82,7 @@ Sound_effect	gun-gunshot-01.wav
 
 #Tower
 Type		Cannon
-Damage		100
+Damage		1000
 Range		2000
 Reload_time	1000
 Build_time	250
@@ -92,10 +92,12 @@ Sound_effect	gun-gunshot-01.wav
 #Missile
 Type		Rocket
 Speed		10
+Radius		0
 
 #Missile
 Type		Cannon
-Speed		30
+Speed		3
+Radius		200
 
 
 ---Waves---

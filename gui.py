@@ -1,9 +1,12 @@
 from PyQt5 import QtWidgets, QtCore, QtGui
+from PyQt5.QtWidgets import QPushButton, QGraphicsSceneMouseEvent
+from PyQt5.QtGui import QBrush, QColor, QFont
 
 from enemy_graphics_item import EnemyGraphicsItem
 from tower_graphics_item import TowerGraphicsItem
 from missile_graphics_item import MissileGraphicsItem
 from board_graphics_item import BoardGraphicsItem
+from menu_graphics_text_item import MenuGraphicsTextItem
 
 from add_board_graphics import add_board_graphics
 
@@ -11,33 +14,37 @@ class GUI(QtWidgets.QMainWindow):
 
 	def __init__(self, game):
 		super().__init__()
-		self.setCentralWidget(QtWidgets.QWidget()) 			# QMainWindown must have a centralWidget to be able to add layouts
-		self.horizontal = QtWidgets.QHBoxLayout() 			# Horizontal main layout
-		self.centralWidget().setLayout(self.horizontal)
-		self.game = game
-		self.square_size = game.get_board().get_square_size()
-		self.init_window()
+		self.scene = QtWidgets.QGraphicsScene()
+		self.scene.setSceneRect(0, 0, 1900, 1050)
+		self.view = QtWidgets.QGraphicsView(self.scene, self)
+		self.view.setBackgroundBrush(QBrush(QColor("Black")))	# Set background to black
+		self.view.adjustSize()
+		#self.view.show()
 
-		#main_menu(self)
+		self.setCentralWidget(self.view)
 
-		#self.init_buttons()
+
+		#self.setCentralWidget(QtWidgets.QWidget()) 			# QMainWindown must have a centralWidget to be able to add layouts
+
+		self.showFullScreen()
+		self.showMaximized()
+		self.setWindowTitle("Defence")
+		#self.show()
 
 		self.board_graphics_items = []
-
 		self.enemy_graphics_items = []
 		self.tower_graphics_items = []
 		self.missile_graphics_items = []
 
-		
-		self.add_all_graphics()
-		self.update_all()
+		self.game = game
+		self.square_size = game.get_board().get_square_size()
 
-		# Set a timer to call the update function periodically
-		self.timer = QtCore.QTimer()
-		self.timer.start(16) # Milliseconds - 16 milliseconds to get to 60 frames per second
-		self.timer.timeout.connect(self.update_all)
+		self.main_menu()
 
-		
+		#self.init_buttons()
+
+		#self.play()
+
 
 
 	def add_all_graphics(self):
@@ -110,7 +117,6 @@ class GUI(QtWidgets.QMainWindow):
 
 
 	def update_towers(self, towers):
-		#towers[:] = [tower for tower in towers if not tower.shoot()]
 
 		for tower in towers:
 			missile = tower.shoot()
@@ -124,10 +130,7 @@ class GUI(QtWidgets.QMainWindow):
 			tower_graphics_item.update_graphics()
 
 	def update_missiles(self, missiles):
-		missiles[:] = [missile for missile in missiles if not missile.move()]
-
-		#for missile_graphics_item in self.missile_graphics_items:
-		#	missile_graphics_item.update_graphics()
+		missiles[:] = [missile for missile in missiles if not missile.move(self.game.get_board().get_enemies())]
 
 		new_missile_graphics_items = []
 
@@ -141,20 +144,64 @@ class GUI(QtWidgets.QMainWindow):
 		self.missile_graphics_items = new_missile_graphics_items
 
 
-	def init_window(self):
-		self.showFullScreen()
-		self.showMaximized()
+	def main_menu(self):
+		font = QFont("Comic Sans", 75)
+		color = QColor("White")
+		self.play_text_item = MenuGraphicsTextItem(self, "Play", font, color)
+		self.high_scores_text_item = MenuGraphicsTextItem(self, "High Scores", font, color)
+
+		self.play_text_item.setPos(0, 300)
+		self.play_text_item.adjustSize()
+		print(self.play_text_item.textWidth())
+		self.high_scores_text_item.setPos(0, 600)
+		self.high_scores_text_item.adjustSize()
+		print(self.high_scores_text_item.textWidth())
+
+		self.scene.addItem(self.play_text_item)
+		self.scene.addItem(self.high_scores_text_item)
+
+		#if play_text_item.mousePressEvent(event):
+		#	self.play()
+
+		#elif high_scores_text_item.mousePressEvent():
+		#	self.show_high_scores()
+
+
+	def play(self):
+		self.scene.removeItem(self.play_text_item)			# Remove Play text button from scene
+		self.scene.removeItem(self.high_scores_text_item)	# Remove High Scores text button from scene
+
+		self.add_all_graphics()
+		self.update_all()
+
+		# Set a timer to call the update function periodically
+		self.timer = QtCore.QTimer()
+		self.timer.start(16) # Milliseconds - 16 milliseconds to get to 60 frames per second
+		self.timer.timeout.connect(self.update_all)
+
+
+
+		#self.vertical_board = QtWidgets.QVBoxLayout() 			# Horizontal main layout
+		#self.centralWidget().setLayout(self.vertical_board)
+		
+		#self.horizontal_controls = QtWidgets.QVBoxLayout()
+		#self.centralWidget().setLayout(self.horizontal_controls)
+
+
+
 		#self.setGeometry(100, 50, 20, 1300)#----------------------------------------------IMPLEMENT TO READ VALUES FROM PLAYERS WINDOW
-		self.setWindowTitle("Defence")
-		self.show()
+
 
 		# Add a scene for drawing 2d objects------------------------------------------------------------REMOVE
-		self.scene = QtWidgets.QGraphicsScene()
+		#self.scene = QtWidgets.QGraphicsScene()
 		#self.scene.setSceneRect(0, 0, 2736, 1824)
-		self.scene.setSceneRect(0, 0, 1900, 1050)
+		#self.scene.setSceneRect(0, 0, 1900, 1050)
 
 		# Add a view for showing the scene------------------------------------------------------------REMOVE
-		self.view = QtWidgets.QGraphicsView(self.scene, self)
-		#self.view.adjustSize()
-		self.view.show()
-		self.horizontal.addWidget(self.view)
+		"""self.view = QtWidgets.QGraphicsView(self.scene, self)
+		self.view.adjustSize()
+		self.view.show()"""
+		#self.vertical_board.addWidget(self.view)
+
+
+	#def show_high_scores():

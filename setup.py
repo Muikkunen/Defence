@@ -73,7 +73,7 @@ class Setup(object):
 
 
 	def load_missile(self, file, game):
-		missile_type, speed = (None,) * 2
+		missile_type, speed, radius = (None,) * 3
 
 		while True:
 			current_line = self.get_current_information(file)	
@@ -82,9 +82,11 @@ class Setup(object):
 				missile_type = current_line[1]
 			elif current_line[0] == "Speed":
 				speed = int(current_line[1])
+			elif current_line[0] == "Radius":
+				radius = int(current_line[1])
 
-			if None not in (missile_type, speed):
-				missile_information = [missile_type, speed]
+			if None not in (missile_type, speed, radius):
+				missile_information = [missile_type, speed, radius]
 				game.add_missile_type(missile_type, missile_information)
 				return
 

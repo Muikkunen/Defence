@@ -1,4 +1,4 @@
-from coordinates import *
+from coordinates import distance, new_location, direction
 
 
 class Missile(object):
@@ -16,6 +16,7 @@ class Missile(object):
 
 		self.type = missile_information[0]
 		self.speed = missile_information[1]
+		self.radius = missile_information[2]
 
 		self.damage = None
 		self.location = None
@@ -53,7 +54,7 @@ class Missile(object):
 
 	# Move the missile, returns True if missile should be deleted (it has hit its target or missile target is not static
 	#	and the enemy has been deleted and False if otherwise
-	def move(self):
+	def move(self, enemies):
 		if self.target == None:					# If target has been deleted, return True to indicate that the missile should be deleted
 			return True
 
@@ -66,7 +67,13 @@ class Missile(object):
 		# Calculate the distance between missile and target
 		if distance(self.location, self.target_location) <= self.speed:
 
+			# If missile's type is static, check which enemies are in missile's explosion radius
 			if self.static_target:
+				for enemy in enemies:
+					# If the distance between the explosion location and the enemy's location, reduce enemy's hitpoints
+					if distance(self.target_location, enemy.get_location()) <= self.radius: 
+						enemy.reduce_hitpoints(self.damage)
+
 				print("draw explosion here")
 				return True 					# Return True to indicate that the missile has hit its target and should be deleted
 			else:
@@ -75,3 +82,4 @@ class Missile(object):
 
 		self.location = new_location(self.location, self.target_location, self.speed)
 		self.degrees = direction(self.location, self.target_location, self.degrees)
+		return False
