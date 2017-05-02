@@ -9,8 +9,14 @@ class TowerGraphicsItem(QtWidgets.QGraphicsPixmapItem):
 
 		self.tower = tower
 		self.square_size = square_size
+		self.is_tower_base = False
 
-		if self.tower.get_type() == "Rocket":
+
+		if self.tower.is_building():
+			self.setPixmap(QPixmap("images/Tower_base.png"))
+			self.is_tower_base = True
+			self.is_built = False
+		elif self.tower.get_type() == "Rocket":
 			self.setPixmap(QPixmap("images/Rocket.png"))
 		elif self.tower.get_type() == "Cannon":
 			self.setPixmap(QPixmap("images/Cannon.png"))
@@ -25,10 +31,16 @@ class TowerGraphicsItem(QtWidgets.QGraphicsPixmapItem):
 	def get_tower(self):
 		return self.tower
 
-
 	def update_graphics(self):
 		self.updatePosition()
-		self.updateRotation()
+		if not self.is_tower_base:
+			self.updateRotation()
+
+	def build(self):
+		if not self.is_built:
+			if not self.tower.is_building():
+				self.is_built = True
+				return True
 
 	def updatePosition(self):
 		location = self.tower.get_location()

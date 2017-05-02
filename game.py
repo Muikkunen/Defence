@@ -1,18 +1,27 @@
 from board import Board
+from enemy import Enemy
 
 class Game():
 
 	def __init__ (self):
-		self.money = 0				# Integer to store the information of the player's money
-		self.points = 0				# Integer to store the information of the player's points
-		self.lives = 0				# Integer to store the information of the player's lives
-		self.current_wave = 0		# Integer to store the information of the current wave
-		self.routes = []			# Container for different routes (E.g. Easy, Medium, Hard)
+		self.money = 0					# Integer to store the information of the player's money
+		self.points = 0					# Integer to store the information of the player's points
+		self.lives = 0					# Integer to store the information of the player's lives
+		self.time_between_waves = 0		# Integer to store the information of the time between waves
+		self.enemy_spawn_interval = 0
+		self.fps = 0					# Integer to store the frames per second value
+		self.routes = []				# Container for different routes (E.g. Easy, Medium, Hard)
 
-		self.enemy_types = {}		# Dictionary for different enemies
-		self.tower_types = {}		# Dictionary for different towers
-		self.missile_types = {}		# Dictionary for different missiles
+		self.enemy_types = {}			# Dictionary for different enemies
+		self.tower_types = {}			# Dictionary for different towers
+		self.missile_types = {}			# Dictionary for different missiles
 
+	def setup(self, game_information):
+		self.money = game_information[0]
+		self.lives = game_information[1]
+		self.time_between_waves = game_information[2]
+		self.enemy_spawn_interval = game_information[3]
+		self.fps = game_information[4]
 
 	# Game's getters
 	def get_money(self):
@@ -23,6 +32,15 @@ class Game():
 
 	def get_lives(self):
 		return self.lives
+
+	def get_time_between_waves(self):
+		return self.time_between_waves
+
+	def get_enemy_spawn_interval(self):
+		return self.enemy_spawn_interval
+
+	def get_fps(self):
+		return self.fps
 
 	def get_board(self):
 		return self.board
@@ -89,12 +107,37 @@ class Game():
 		self.points += points
 
 
-	def set_money(self, money):
+	"""def set_money(self, money):
 		self.money = money
 
 	def set_lives(self, lives):
 		self.lives = lives
 
+	def set_time_between_waves(self, time):
+		self.time_between_waves = time
+
+	def set_enemy_spawn_interval(self, time):
+		self.enemy_spawn_interval = time
+
+	def set_fps(self, fps):
+		self.fps = fps"""
 
 	def set_board(self, board):
 		self.board = board
+
+
+	def next_wave(self):
+		enemies_to_be_added = []
+		try:
+			current_wave = self.get_board().get_current_wave() - 1		# Get the current wave; minus 1, because lists in python start from 0
+			waves = self.get_board().get_waves()
+			for amount in range(waves[current_wave][1]):
+				enemy_name = waves[current_wave][0]
+				enemy = Enemy(self.enemy_types[enemy_name])	# Select the enemy's type from game's dictionary
+				enemies_to_be_added.append(enemy)
+		except IndexError:
+			print("Trying to find too many enemies from a wave")
+	
+		self.get_board().advance_to_next_wave()
+		#self.adding_enemies = False								# Indicate that new enemies are not currently being added
+		return enemies_to_be_added

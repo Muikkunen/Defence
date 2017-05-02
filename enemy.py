@@ -1,8 +1,6 @@
 from coordinates import *
 
 class Enemy(object):
-
-	#def __init__ (self, enemy_type, name, hitpoints, armour, speed, worth, game):-----------------------------------------OLD ONE
 	
 	def __init__ (self, enemy_information):
 		self.enemy_type = enemy_information[0]

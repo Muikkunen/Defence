@@ -1,12 +1,13 @@
 from PyQt5 import QtWidgets, QtCore, QtGui
 from PyQt5.QtWidgets import QPushButton, QGraphicsSceneMouseEvent
 from PyQt5.QtGui import QBrush, QColor, QFont
+from PyQt5.QtCore import QTimer
 
 from enemy_graphics_item import EnemyGraphicsItem
 from tower_graphics_item import TowerGraphicsItem
 from missile_graphics_item import MissileGraphicsItem
 from board_graphics_item import BoardGraphicsItem
-from menu_graphics_text_item import MenuGraphicsTextItem
+from menu_graphics_item import MenuGraphicsItem
 
 from add_board_graphics import add_board_graphics
 
@@ -15,7 +16,10 @@ class GUI(QtWidgets.QMainWindow):
 	def __init__(self, game):
 		super().__init__()
 		self.scene = QtWidgets.QGraphicsScene()
-		self.scene.setSceneRect(0, 0, 1900, 1050)
+		self.window_size = [1900, 1050]
+
+		self.scene.setSceneRect(0, 0, self.window_size[0], self.window_size[1])
+
 		self.view = QtWidgets.QGraphicsView(self.scene, self)
 		self.view.setBackgroundBrush(QBrush(QColor("Black")))	# Set background to black
 		self.view.adjustSize()
@@ -33,6 +37,7 @@ class GUI(QtWidgets.QMainWindow):
 
 		self.board_graphics_items = []
 		self.enemy_graphics_items = []
+		self.tower_base_graphics_items = []
 		self.tower_graphics_items = []
 		self.missile_graphics_items = []
 
@@ -56,7 +61,7 @@ class GUI(QtWidgets.QMainWindow):
 		rocket = self.game.get_tower_types()["Rocket"]
 		cannon = self.game.get_tower_types()["Cannon"]
 		position1 = [10, 5]
-		position2 = [13, 5]
+		position2 = [2, 5]
 		self.game.get_board().add_tower(rocket, position1)
 		self.game.get_board().add_tower(cannon, position2)
 		"""cannon = self.game.get_tower_types()["Cannon"]
@@ -65,59 +70,92 @@ class GUI(QtWidgets.QMainWindow):
 		#---------------------------------------------------------------
 
 
-		self.add_enemy_graphics_items()
-		self.add_tower_graphics_items()
+		#self.add_enemy_graphics_items()
+		self.add_tower_base_graphics_item(self.game.get_board().get_towers()[0])
+		self.add_tower_base_graphics_item(self.game.get_board().get_towers()[1])
 		#self.add_missiles_graphics_items()
 
 
 
 
+	"""def next_wave(self):
+		self.add_enemy_timer = QTimer()
+		#for i in range(self.game.get_board().amount_of_enemies_on_next_wave()):
+		
+		#self.add_enemy_timer.singleShot(self.game.get_enemy_spawn_interval(), self.add_enemy_graphics_item)
+		
+		#self.amount_of_enemies_to_be_added = self.game.get_board().amount_of_enemies_on_next_wave()
+		
+		amount_of_enemies_on_next_wave = self.game.get_board().amount_of_enemies_on_next_wave()
 
-	def add_enemy_graphics_items(self):
-		enemies = self.game.get_board().get_enemies()
+		if amount_of_enemies_on_next_wave > 0:
+			self.add_enemy_timer.start(self.game.get_enemy_spawn_interval())
+			amount_of_enemies_on_next_wave -= 1
+			print(amount_of_enemies_on_next_wave)
+			self.add_enemy_timer.timeout.connect(self.add_enemy_graphics_item)"""
 
-		for enemy in enemies:
-			enemy_graphics_item = EnemyGraphicsItem(enemy, self.game.get_board().get_square_size())
-			self.enemy_graphics_items.append(enemy_graphics_item)
-			self.scene.addItem(enemy_graphics_item)
+	def add_enemies(self):
+		self.enemies_to_be_added = self.game.next_wave()
 
-	def add_tower_graphics_items(self):
-		towers = self.game.get_board().get_towers()
+	def add_enemy_graphics_item(self):
+		enemy = self.enemies_to_be_added[0]
+		self.enemies_to_be_added.remove(enemy)
+		if self.enemies_to_be_added == []:					# If all enemies have been added, indicate that new ones can be added
+			self.game.get_board().set_enemies_added()
 
-		for tower in towers:
-			tower_graphics_item = TowerGraphicsItem(tower, self.game.get_board().get_square_size())
-			self.tower_graphics_items.append(tower_graphics_item)
-			self.scene.addItem(tower_graphics_item)
+		enemy = self.game.get_board().add_enemy(enemy, self.game.get_board().get_enemy_start_location())
+		enemy_graphics_item = EnemyGraphicsItem(enemy, self.game.get_board().get_square_size())
+		self.enemy_graphics_items.append(enemy_graphics_item)
+		self.scene.addItem(enemy_graphics_item)
+		self.new_enemy_timer.setSingleShot(True)
+		self.new_enemy_timer.start(self.game.get_enemy_spawn_interval())
+
+
+	def add_tower_base_graphics_item(self, tower):
+		tower_base_graphics_item = TowerGraphicsItem(tower, self.game.get_board().get_square_size())
+		self.tower_base_graphics_items.append(tower_base_graphics_item)
+		self.scene.addItem(tower_base_graphics_item)
 
 
 
 	def update_all(self):
-		self.update_enemies(self.game.get_board().get_enemies())	# Firstly the enemies move
+		self.update_enemies()										# Firstly the enemies move
 		self.update_towers(self.game.get_board().get_towers())		# Then  the towers shoot according to their targets
 		self.update_missiles(self.game.get_board().get_missiles())	# Lastly the missiles that were created as well as the previously created ones move
 
-	def update_enemies(self, enemies):
+
+	def update_enemies(self):
 		# ADD WAVE HERE TO CHECK THAT NEW ENEMIES GET GRAPHICS ITEMS AND TO GET THE GAME LOGIC TO WORK
+		if self.enemies_to_be_added != []:
+			if self.new_enemy_timer.remainingTime() < 0:
+				self.add_enemy_graphics_item()
 
-		enemies[:] = [enemy for enemy in enemies if not enemy.is_dead()] 	# Check which enemies are dead
-		enemies[:] = [enemy for enemy in enemies if not enemy.move()]		# Move the enemies
+		enemies = self.game.get_board().get_enemies()
 
-		#print(self.enemy_graphics_items)
+		if enemies == []:
+			if not self.game.get_board().is_adding_enemies():		# Do not add new enemies if enemies are currently being added
+				self.game.get_board().set_adding_enemies()
+				self.next_wave_timer = QTimer()
+				#self.next_wave_timer.singleShot(self.game.get_time_between_waves(), self.add_enemy_graphics_items)
+				self.next_wave_timer.singleShot(self.game.get_time_between_waves(), self.add_enemies)
+		else:
+			enemies[:] = [enemy for enemy in enemies if not enemy.is_dead()] 	# Check which enemies are dead
+			enemies[:] = [enemy for enemy in enemies if not enemy.move()]		# Move the enemies
 
-		new_enemy_graphics_items = []
+			enemy_graphics_items_to_be_removed = []
 
-		for enemy_graphics_item in self.enemy_graphics_items:
-			if enemy_graphics_item.get_enemy() in enemies:
-				enemy_graphics_item.update_graphics()
-				new_enemy_graphics_items.append(enemy_graphics_item)
-			else:
-				self.scene.removeItem(enemy_graphics_item)
+			for enemy_graphics_item in self.enemy_graphics_items:
+				if enemy_graphics_item.get_enemy() in enemies:
+					enemy_graphics_item.update_graphics()
+				else:
+					self.scene.removeItem(enemy_graphics_item)
+					enemy_graphics_items_to_be_removed.append(enemy_graphics_item)
 
-		self.enemy_graphics_items = new_enemy_graphics_items
+			for item in enemy_graphics_items_to_be_removed:
+				self.enemy_graphics_items.remove(item)
 
 
 	def update_towers(self, towers):
-
 		for tower in towers:
 			missile = tower.shoot()
 			if missile != None:
@@ -125,9 +163,16 @@ class GUI(QtWidgets.QMainWindow):
 				self.missile_graphics_items.append(missile_graphics_item)
 				self.scene.addItem(missile_graphics_item)
 
+		for tower_base_graphics_item in self.tower_base_graphics_items:
+			tower_base_graphics_item.update_graphics()
+			if tower_base_graphics_item.build():
+				tower_graphics_item = TowerGraphicsItem(tower_base_graphics_item.get_tower(), self.game.get_board().get_square_size())
+				self.tower_graphics_items.append(tower_graphics_item)
+				self.scene.addItem(tower_graphics_item)
 
 		for tower_graphics_item in self.tower_graphics_items:
 			tower_graphics_item.update_graphics()
+
 
 	def update_missiles(self, missiles):
 		missiles[:] = [missile for missile in missiles if not missile.move(self.game.get_board().get_enemies())]
@@ -145,20 +190,30 @@ class GUI(QtWidgets.QMainWindow):
 
 
 	def main_menu(self):
-		font = QFont("Comic Sans", 75)
-		color = QColor("White")
-		self.play_text_item = MenuGraphicsTextItem(self, "Play", font, color)
-		self.high_scores_text_item = MenuGraphicsTextItem(self, "High Scores", font, color)
+		#font = QFont("Comic Sans", 75)
+		#color = QColor("White")
+		#self.play_text_item = MenuGraphicsItem(self, self.scene, "Play", font, color, 500, -3000)
 
-		self.play_text_item.setPos(0, 300)
-		self.play_text_item.adjustSize()
-		print(self.play_text_item.textWidth())
-		self.high_scores_text_item.setPos(0, 600)
-		self.high_scores_text_item.adjustSize()
-		print(self.high_scores_text_item.textWidth())
 
-		self.scene.addItem(self.play_text_item)
-		self.scene.addItem(self.high_scores_text_item)
+		play_item = MenuGraphicsItem(self, "images/play.png", self.window_size[0] / 4, self.window_size[1] / 2, "Play")
+		high_scores_item = MenuGraphicsItem(self, "images/high_scores.png", self.window_size[0] / 4 * 3, self.window_size[1] / 2, "High Scores")
+		self.scene.addItem(play_item)
+		self.scene.addItem(high_scores_item)
+
+		#self.high_scores_text_item = MenuGraphicsItem(self, self.scene, "High Scores", font, color)
+
+		#self.play_text_item.get_text().setPos(0, 300)
+		#self.play_text_item.get_text().adjustSize()
+
+
+		#self.high_scores_text_item.get_text().setPos(0, 600)
+		#self.high_scores_text_item.get_text().adjustSize()
+
+
+
+
+		#self.scene.addItem(self.play_text_item.get_text())
+		#self.scene.addItem(self.high_scores_text_item)
 
 		#if play_text_item.mousePressEvent(event):
 		#	self.play()
@@ -168,15 +223,17 @@ class GUI(QtWidgets.QMainWindow):
 
 
 	def play(self):
-		self.scene.removeItem(self.play_text_item)			# Remove Play text button from scene
-		self.scene.removeItem(self.high_scores_text_item)	# Remove High Scores text button from scene
+		self.enemies_to_be_added = []
+		self.new_enemy_timer = QTimer()
+		#self.scene.removeItem(self.play_text_item)			# Remove Play text button from scene
+		#self.scene.removeItem(self.high_scores_text_item)	# Remove High Scores text button from scene
 
 		self.add_all_graphics()
 		self.update_all()
 
 		# Set a timer to call the update function periodically
-		self.timer = QtCore.QTimer()
-		self.timer.start(16) # Milliseconds - 16 milliseconds to get to 60 frames per second
+		self.timer = QTimer()
+		self.timer.start(self.game.get_fps()) 				# Milliseconds
 		self.timer.timeout.connect(self.update_all)
 
 

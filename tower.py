@@ -30,7 +30,7 @@ class Tower(object):
 		self.reload_timer = QtCore.QTimer()				# Timer to keep on track the reloading time
 
 		self.building = True 							# Indicate whether the tower is still building or not
-		self.build_timer = QtCore.QTimer()				# Timer to measure tower building
+		self.build_timer = QtCore.QTimer()				# Timer to measure tower's building time
 		self.build_timer.setSingleShot(True)			# Set timer to measure time only once since tower will be built only once
 
 		self.degrees = None
@@ -58,8 +58,9 @@ class Tower(object):
 	def get_location(self):
 		return self.location
 
-	def get_building(self):
+	def is_building(self):
 		return self.building
+
 
 	def get_degrees(self):
 		if self.degrees != None and self.location != None and self.target != None:
@@ -76,7 +77,6 @@ class Tower(object):
 			if distance(self.location, enemy.get_location()) <= self.shoot_range:
 				enemies_in_range.append(enemy)
 		
-
 		if enemies_in_range == []:								# Tower does not shoot, because zero enemies are in range
 			return
 

@@ -1,5 +1,5 @@
 from tower import Tower
-#from enemy import Enemy
+from enemy import Enemy
 #from missile import missile
 from square import Square
 
@@ -22,6 +22,9 @@ class Board(object):
 		self.missiles = []
 		self.route_points = []		# Container for route points
 		self.waves = []				# Container for different waves
+
+		self.current_wave = 1
+		self.adding_enemies = False
 		
 
 
@@ -59,25 +62,38 @@ class Board(object):
 	def get_waves(self):
 		return self.waves
 
+	def get_current_wave(self):
+		return self.current_wave
+
+	def get_enemy_start_location(self):
+		return self.enemy_start_location
+
+	def amount_of_enemies_on_next_wave(self):
+		return len(self.waves[self.current_wave - 1])
+
+	"""def get_waves(self):
+		return self.waves"""
+
 
 	def set_route_points(self, route_points):
 		self.route_points = route_points
 
 
 	def add_wave(self, enemy, amount):
-		sub_list_of_enemies = []
+		wave = [enemy, amount]
+		self.waves.append(wave)
+
+
+
+		"""sub_list_of_enemies = []
 		for i in range(amount):
 			sub_list_of_enemies.append(enemy)
-		self.waves.append(sub_list_of_enemies)
+		self.waves.append(sub_list_of_enemies)"""
 
 	"""
 	def current_wave(self, wave): #---------------------------NOT READY-----------------------------------
 		for enemy in range(wave):
 			self.enemies.append(enemy)"""
-
-	def add_enemy(self, enemy, position):
-		enemy.set_location(position)
-		self.enemies.append(enemy)
 
 
 	def add_tower(self, tower_information, position):
@@ -149,6 +165,58 @@ class Board(object):
 					else:
 						print("CANNOT ADD")										#----------------------- NOT IMPLEMENTED
 
+		self.enemy_start_location = list(self.route_points[0])		# Define the point where enemies should start
+
 
 	def kill_enemy(self, enemy):
 		self.enemies.remove(enemy)
+
+
+	def add_enemy(self, enemy, position):
+		enemy.set_location(position)
+		self.enemies.append(enemy)
+		return enemy
+
+	"""def next_wave(self):
+		enemies_to_be_added = []
+		try:
+			current_wave = self.current_wave - 1					# Get the current wave; minus 1, because lists in python start from 0
+			for amount in range(self.waves[current_wave][1]):
+				enemy_name = self.waves[current_wave][0]
+				enemy = Enemy(self.game.get_enemy_types()[enemy_name])	# Select the enemy's type from game's dictionary
+				enemies_to_be_added.append(enemy)
+			
+
+			for enemy in self.waves[current_wave]:					# Get enemies from the current wave
+				enemies_to_be_added.append(enemy)
+		except IndexError:
+			print("Trying to find too many enemies from a wave")
+	
+		self.current_wave += 1	
+		#self.adding_enemies = False								# Indicate that new enemies are not currently being added
+		return enemies_to_be_added
+
+		try:
+			current_wave = self.current_wave - 1					# Get the current wave; minus 1, because lists in python start from 0
+			enemy = self.waves[current_wave][0]						# Get enemies from the current wave
+			self.add_enemy(enemy, self.enemy_start_location)
+			self.waves[current_wave].remove(enemy)
+		except IndexError:
+			print("Trying to find too many enemies from one wave")
+	
+		self.current_wave += 1
+		self.adding_enemies = False									# Indicate that new enemies are not currently being added
+		return enemy												# Return the added enemy for GUI to add graphics item for it"""
+
+
+	def is_adding_enemies(self):
+		return self.adding_enemies
+
+	def set_adding_enemies(self):
+		self.adding_enemies = True
+
+	def set_enemies_added(self):
+		self.adding_enemies = False
+
+	def advance_to_next_wave(self):
+		self.current_wave += 1

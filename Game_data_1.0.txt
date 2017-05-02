@@ -23,6 +23,9 @@ Board		70%
 #Game
 Money		1000
 Lives		10
+Time		1000
+Interval	2000
+FPS		16
 
 ---Board size---
 #Board		
@@ -68,7 +71,7 @@ Type		KILLER2
 Name		Name_KILLER2 Should enemy have a name?
 Hitpoints	200
 Armour		0
-Speed		5
+Speed		2
 Worth		100
 
 ---Towers---
@@ -76,16 +79,16 @@ Worth		100
 Type		Rocket
 Damage		20
 Range		1000
-Reload_time	1000
-Build_time	100
+Reload_time	2000
+Build_time	500
 Sound_effect	gun-gunshot-01.wav
 
 #Tower
 Type		Cannon
-Damage		1000
+Damage		200
 Range		2000
 Reload_time	1000
-Build_time	250
+Build_time	1000
 Sound_effect	gun-gunshot-01.wav
 
 ---Missiles---
@@ -96,12 +99,27 @@ Radius		0
 
 #Missile
 Type		Cannon
-Speed		3
+Speed		5
 Radius		200
 
 
----Waves---
+---Waves--- ---Should be after Enemies---
 #Waves
+KILLER1		5
+KILLER2		3
+KILLER1		10
+KILLER2		5
+KILLER1		20
+KILLER1		5
+KILLER2		3
+KILLER1		10
+KILLER2		5
+KILLER1		20
+KILLER1		5
+KILLER2		3
+KILLER1		10
+KILLER2		5
+KILLER1		20
 KILLER1		5
 KILLER2		3
 KILLER1		10

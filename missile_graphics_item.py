@@ -33,7 +33,7 @@ class MissileGraphicsItem(QtWidgets.QGraphicsPixmapItem):
 
 	def updatePosition(self):
 		location = self.missile.get_location()
-		self.setPos(location[0] - ((self.width - self.square_size) / 2), location[1] - ((self.height - self.square_size) / 2))
+		self.setPos(location[0]  - ((self.width - self.square_size) / 2), location[1] - ((self.height - self.square_size) / 2))
 
 
 	def updateRotation(self):

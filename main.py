@@ -90,9 +90,9 @@ def main():
 	board = game.get_board()
 
 	#print(game.get_enemy_types()["KILLER2"])
-
-	board.add_enemy(Enemy(game.get_enemy_types()["KILLER1"]), list(game.get_board().get_route_points()[0]))
-	board.add_enemy(Enemy(game.get_enemy_types()["KILLER2"]), list(game.get_board().get_route_points()[0]))
+	#-----------------------------------------------------------------------------------------------------------------------
+	#board.add_enemy(Enemy(game.get_enemy_types()["KILLER1"]), list(game.get_board().get_route_points()[0]))
+	#board.add_enemy(Enemy(game.get_enemy_types()["KILLER2"]), list(game.get_board().get_route_points()[0]))
 
 	#game.get_board().get_towers()[0].shoot()
 

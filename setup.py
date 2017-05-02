@@ -2,10 +2,9 @@ from io import StringIO
 
 from game import Game
 from board import Board
-#from enemy import Enemy
+from enemy import Enemy
 from tower import Tower
 from missile import Missile
-
 
 class CorruptedGameData(Exception):
 	def __init__ (self, message):
@@ -67,7 +66,7 @@ class Setup(object):
 			# Examine that type is defined in game.enemy_types
 			if current_line[0] in game.get_enemy_types():
 				# Add current wave to the Board
-				game.get_board().add_wave(game.get_enemy_types()[current_line[0]], int(current_line[1]))
+				game.get_board().add_wave(current_line[0], int(current_line[1]))
 			else:												#----------------------------------NOT IMPLEMENTED---------------
 				print("Enemy not in game types")
 
@@ -185,17 +184,37 @@ class Setup(object):
 
 
 	def load_game(self, file, game):
+		# Set up variables for game information
+		money, lives, time, interval, fps = (None,) * 5
+
 		while True:
 			current_line = self.get_current_information(file)
 
 			if current_line[0] == "Money":
-				game.set_money(int(current_line[1]))
+				money = int(current_line[1])
+				#game.set_money(int(current_line[1]))
 			elif current_line[0] == "Lives":
-				game.set_lives(int(current_line[1]))
+				lives = int(current_line[1])
+				#game.set_lives(int(current_line[1]))
+			elif current_line[0] == "Time":
+				time = int(current_line[1])
+				#game.set_time_between_waves(int(current_line[1]))
+			elif current_line[0] == "Interval":
+				interval = int(current_line[1])
+				#game.set_enemy_spawn_interval(int(current_line[1]))
+			elif current_line[0] == "FPS":
+				fps = int(current_line[1])
+				#game.set_fps(int(current_line[1]))
 
-			# Examine whether money and lives have been found
-			if game.get_money() != 0 and game.get_lives() != 0:
+			# Examine whether all game information has been found
+			if None not in (money, lives, time, interval, fps):
+				game_information = [money, lives, time, interval, fps]
+				game.setup(game_information)
 				return game
+
+			"""# Examine whether money and lives have been found
+			if game.get_money() != 0 and game.get_lives() != 0 and game.get_time_between_waves() != 0 and game.get_enemy_spawn_interval() != 0:
+				return game"""
 
 
 	def load_all(self, input):
