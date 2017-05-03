@@ -21,3 +21,5 @@ class MenuGraphicsItem(QtWidgets.QGraphicsPixmapItem):
 			self.GUI.play()
 		elif self.name == "High Scores":
 			self.GUI.show_high_scores()
+		elif self.name == "Main Menu":
+			self.GUI.main_menu()

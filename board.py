@@ -23,7 +23,7 @@ class Board(object):
 		self.route_points = []		# Container for route points
 		self.waves = []				# Container for different waves
 
-		self.current_wave = 1
+		self.current_wave = 0
 		self.adding_enemies = False
 		
 
@@ -69,7 +69,7 @@ class Board(object):
 		return self.enemy_start_location
 
 	def amount_of_enemies_on_next_wave(self):
-		return len(self.waves[self.current_wave - 1])
+		return len(self.waves[self.current_wave])
 
 	"""def get_waves(self):
 		return self.waves"""
@@ -176,38 +176,6 @@ class Board(object):
 		enemy.set_location(position)
 		self.enemies.append(enemy)
 		return enemy
-
-	"""def next_wave(self):
-		enemies_to_be_added = []
-		try:
-			current_wave = self.current_wave - 1					# Get the current wave; minus 1, because lists in python start from 0
-			for amount in range(self.waves[current_wave][1]):
-				enemy_name = self.waves[current_wave][0]
-				enemy = Enemy(self.game.get_enemy_types()[enemy_name])	# Select the enemy's type from game's dictionary
-				enemies_to_be_added.append(enemy)
-			
-
-			for enemy in self.waves[current_wave]:					# Get enemies from the current wave
-				enemies_to_be_added.append(enemy)
-		except IndexError:
-			print("Trying to find too many enemies from a wave")
-	
-		self.current_wave += 1	
-		#self.adding_enemies = False								# Indicate that new enemies are not currently being added
-		return enemies_to_be_added
-
-		try:
-			current_wave = self.current_wave - 1					# Get the current wave; minus 1, because lists in python start from 0
-			enemy = self.waves[current_wave][0]						# Get enemies from the current wave
-			self.add_enemy(enemy, self.enemy_start_location)
-			self.waves[current_wave].remove(enemy)
-		except IndexError:
-			print("Trying to find too many enemies from one wave")
-	
-		self.current_wave += 1
-		self.adding_enemies = False									# Indicate that new enemies are not currently being added
-		return enemy												# Return the added enemy for GUI to add graphics item for it"""
-
 
 	def is_adding_enemies(self):
 		return self.adding_enemies

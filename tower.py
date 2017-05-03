@@ -21,8 +21,10 @@ class Tower(object):
 		self.shoot_range = tower_information[2]
 		self.reload_time = tower_information[3]
 		self.build_time = tower_information[4]
-		#self.sound_effect = QSound(sound_effect)
-		self.game = tower_information[6]
+		self.image = tower_information[5]
+		self.base_image = tower_information[6]
+		#self.sound_effect = QSound(sound_effect) REMOVE SOUNDS FROM GAME INFORMATION TEXT FILE!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+		self.game = tower_information[8]
 		self.target_type = Tower.STRONGEST				# As default the tower shoots the enemy that is first released
 		self.location = None							# Location will be set when player puts the tower to the board
 														# 	it defines the coordinates where the Tower is
@@ -51,6 +53,12 @@ class Tower(object):
 
 	def get_build_time(self):
 		return self.build_time
+
+	def get_image(self):
+		return self.image
+
+	def get_base_image(self):
+		return self.base_image
 
 	def get_target_type(self):
 		return self.target_type

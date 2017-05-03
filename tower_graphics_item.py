@@ -13,13 +13,11 @@ class TowerGraphicsItem(QtWidgets.QGraphicsPixmapItem):
 
 
 		if self.tower.is_building():
-			self.setPixmap(QPixmap("images/Tower_base.png"))
+			self.setPixmap(QPixmap("images/" + self.tower.get_base_image()))
 			self.is_tower_base = True
 			self.is_built = False
-		elif self.tower.get_type() == "Rocket":
-			self.setPixmap(QPixmap("images/Rocket.png"))
-		elif self.tower.get_type() == "Cannon":
-			self.setPixmap(QPixmap("images/Cannon.png"))
+		else:
+			self.setPixmap(QPixmap("images/" + self.tower.get_image()))
 
 		self.width = self.pixmap().width()
 		self.height = self.pixmap().height()

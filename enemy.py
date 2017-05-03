@@ -9,7 +9,9 @@ class Enemy(object):
 		self.armour = enemy_information[3]
 		self.speed = enemy_information[4]
 		self.worth = enemy_information[5]
-		self.game = enemy_information[6]
+		self.image = enemy_information[6]
+		self.shadow = enemy_information[7]
+		self.game = enemy_information[8]
 		self.location = None						# When initialized, enemy's current location has not been set
 		self.destination = None						# When initialized, enemy does not have destination
 		self.degrees = None 						# Therefore enemy lacks also the direction to which it is going
@@ -29,6 +31,12 @@ class Enemy(object):
 
 	def get_worth(self):
 		return self.worth
+
+	def get_image(self):
+		return self.image
+
+	def get_shadow(self):
+		return self.shadow
 
 	def get_position(self):
 		return self.location

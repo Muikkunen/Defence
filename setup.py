@@ -49,7 +49,7 @@ class Setup(object):
 
 
 	def load_missile(self, file, game):
-		missile_type, speed, radius, time = (None,) * 4
+		missile_type, speed, radius, time, image = (None,) * 5
 
 		while True:
 			current_line = get_current_information(file)	
@@ -62,14 +62,16 @@ class Setup(object):
 				radius = int(current_line[1])
 			elif current_line[0] == "Time":
 				time = float(current_line[1])
+			elif current_line[0] == "Image":
+				image = current_line[1]
 
-			if None not in (missile_type, speed, radius, time):
-				missile_information = [missile_type, speed, radius, time]
+			if None not in (missile_type, speed, radius, time, image):
+				missile_information = [missile_type, speed, radius, time, image]
 				game.add_missile_type(missile_type, missile_information)
 				return
 
 	def load_tower(self, file, game):
-		tower_type, damage, shoot_range, reload_time, build_time, sound_effect = (None,) * 6
+		tower_type, damage, shoot_range, reload_time, build_time, image, base_image, sound_effect = (None,) * 8
 
 		while True:
 			current_line = get_current_information(file)
@@ -84,17 +86,21 @@ class Setup(object):
 				reload_time = int(current_line[1])
 			elif current_line[0] == "Build_time":
 				build_time = int(current_line[1])
+			elif current_line[0] == "Image":
+				image = current_line[1]
+			elif current_line[0] == "Base":
+				base_image = current_line[1]
 			elif current_line[0] == "Sound_effect":
 				sound_effect = current_line[1]
 
 
-			if None not in (tower_type, damage, shoot_range, reload_time, build_time, sound_effect):
-				tower_information = [tower_type, damage, shoot_range, reload_time, build_time, sound_effect, game]
+			if None not in (tower_type, damage, shoot_range, reload_time, build_time, image, base_image, sound_effect):
+				tower_information = [tower_type, damage, shoot_range, reload_time, build_time, image, base_image, sound_effect, game]
 				game.add_tower_type(tower_type, tower_information)
 				return
 
 	def load_enemy(self, file, game):
-		enemy_type, name, hitpoints, armour, speed, worth = (None,) * 6
+		enemy_type, name, hitpoints, armour, speed, image, shadow, worth = (None,) * 8
 
 		while True:
 			current_line = get_current_information(file)	
@@ -109,11 +115,18 @@ class Setup(object):
 				armour = int(current_line[1])
 			elif current_line[0] == "Speed":
 				speed = int(current_line[1])
+			elif current_line[0] == "Image":
+				image = current_line[1]
+			elif current_line[0] == "Shadow":
+				if current_line == "None":
+					shadow = None
+				else:
+					shadow = current_line[1]
 			elif current_line[0] == "Worth":
 				worth = int(current_line[1])
 
-			if None not in (enemy_type, name, hitpoints, armour, speed, worth, game):
-				enemy_information = [enemy_type, name, hitpoints, armour, speed, worth, game]
+			if None not in (enemy_type, name, hitpoints, armour, speed, worth, image, shadow, game):
+				enemy_information = [enemy_type, name, hitpoints, armour, speed, worth, image, shadow, game]
 				game.add_enemy_type(enemy_type, enemy_information)
 				return
 

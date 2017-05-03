@@ -114,11 +114,13 @@ class Game():
 	def set_board(self, board):
 		self.board = board
 
+	def set_enemy_spawn_interval(self, interval):
+		self.enemy_spawn_interval = interval
 
 	def next_wave(self):					# Get the enemies that the player must kill on the next wave
 		enemies_to_be_added = []
 		try:
-			current_wave = self.get_board().get_current_wave() - 1	# Get the current wave; minus 1, because lists in python start from 0
+			current_wave = self.get_board().get_current_wave()		# Get the current wave; minus 1, because lists in python start from 0
 			waves = self.get_board().get_waves()
 			for amount in range(waves[current_wave][1]):
 				enemy_name = waves[current_wave][0]

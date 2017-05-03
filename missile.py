@@ -6,28 +6,34 @@ class Missile(object):
 	#def __init__ (self, missile_type, speed):
 
 	def __init__ (self, missile_information):
-		if missile_information[0] in ["Cannon"]:			# If type is defined here, the missile moves to the point where the enemy was when it was shot
+		# If type is defined here, the missile moves to the point where the enemy was when it was shot
+		if missile_information[0] in ["Cannon"]:
 			self.static_target = True
-		elif missile_information[0] in ["Rocket"]:			# If type is defined here, the missile moves towards the enemy
+		# If type is defined here, the missile moves towards the enemy
+		elif missile_information[0] in ["RocketLauncher", "MachineGun", "DoubleRocketLauncher", "Tank", "Leopard"]:
 			self.static_target = False
-		else:									# If neither case is true, the type of the missile is not defined here and should be added
-			raise SystemExit(missile_type + " is a type of missile that is not "\
-				"defined in class Missile and should be added before playing.")
+		# If neither case is true, the type of the missile is not defined here and should be added
+		else:
+			print(str(missile_information[0]) + " is a type of missile that is not defined in Game_data and should be added before playing")
+			sys.exit(-1)
 
 		self.type = missile_information[0]
 		self.speed = missile_information[1]
 		self.radius = missile_information[2]
 		self.explosion_time = missile_information[3]
+		self.image = missile_information[4]
 
 		self.damage = None
 		self.location = None
 		self.target = None
 		self.target_location = []
-
 		self.degrees = None
 
 	def get_type(self):
 		return self.type
+
+	def get_image(self):
+		return self.image
 
 	def get_damage(self):
 		return self.damage
@@ -55,7 +61,7 @@ class Missile(object):
 
 	# Move the missile, returns True if missile should be deleted (it has hit its target or missile target is not static
 	#	and the enemy has been deleted and False if otherwise
-	def move(self, enemies, gui):
+	def move(self, enemies, GUI):
 		if self.target == None:					# If target has been deleted, return True to indicate that the missile should be deleted
 			return True
 
@@ -75,11 +81,16 @@ class Missile(object):
 					if distance(self.target_location, enemy.get_location()) <= self.radius: 
 						enemy.reduce_hitpoints(self.damage)
 
-				gui.add_explosion_graphics_item(self.target_location, self.type, self.explosion_time)
+				GUI.add_explosion_graphics_item(self.target_location, self.type, self.explosion_time)
 
 				return True 					# Return True to indicate that the missile has hit its target and should be deleted
 			else:
 				self.target.reduce_hitpoints(self.damage)
+				if self.type == "DoubleRocketLauncher":
+					GUI.add_explosion_graphics_item(self.target_location, self.type, self.explosion_time)
+					for enemy in enemies:
+						if distance(self.target_location, enemy.get_location()) <= self.radius: 
+							enemy.reduce_hitpoints(self.damage)
 				return True
 
 		self.location = new_location(self.location, self.target_location, self.speed)

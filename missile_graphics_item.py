@@ -10,10 +10,12 @@ class MissileGraphicsItem(QtWidgets.QGraphicsPixmapItem):
 		self.missile = missile
 		self.square_size = square_size
 
-		if self.missile.get_type() == "Rocket":
+		self.setPixmap(QPixmap("images/" + str(self.missile.get_image())))
+
+		"""if self.missile.get_type() == "Rocket":
 			self.setPixmap(QPixmap("images/Missile_1.png"))
 		elif self.missile.get_type() == "Cannon":
-			self.setPixmap(QPixmap("images/Missile_2.png"))
+			self.setPixmap(QPixmap("images/Missile_2.png"))"""
 
 		self.width = self.pixmap().width()
 		self.height = self.pixmap().height()

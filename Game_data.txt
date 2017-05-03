@@ -30,7 +30,7 @@ FPS		60
 ---Board size---
 #Board		
 Width		30
-Height		16
+Height		12
 Square_size	64
 
 
@@ -65,6 +65,8 @@ Hitpoints	100
 Armour		0
 Speed		1
 Worth		50
+Image		Enemy_1.png
+Shadow		None
 
 #Enemy
 Type		KILLER2
@@ -73,44 +75,163 @@ Hitpoints	200
 Armour		0
 Speed		2
 Worth		100
+Image		Enemy_2.png
+Shadow		None
+
+#Enemy
+Type		KILLER3
+Name		Name_KILLER3 Should enemy have a name?
+Hitpoints	2000
+Armour		0
+Speed		3
+Worth		100
+Image		Enemy_3.png
+Shadow		None
+
+#Enemy
+Type		KILLER4
+Name		Name_KILLER4 Should enemy have a name?
+Hitpoints	2000
+Armour		0
+Speed		4
+Worth		100
+Image		Enemy_4.png
+Shadow		None
+
+#Enemy
+Type		Plane
+Name		Name_KILLER4 Should enemy have a name?
+Hitpoints	20000
+Armour		0
+Speed		4
+Worth		100
+Image		Plane.png
+Shadow		Plane_shadow.png
+
+#Enemy
+Type		Fighter
+Name		Name_KILLER4 Should enemy have a name?
+Hitpoints	2000
+Armour		0
+Speed		4
+Worth		100
+Image		Fighter.png
+Shadow		Fighter_shadow.png
 
 ---Towers---
-#Tower
-Type		Rocket
-Damage		10
-Range		1000
-Reload_time	2000
-Build_time	500
-Sound_effect	gun-gunshot-01.wav
 
 #Tower
 Type		Cannon
-Damage		10
+Damage		100
 Range		2000
 Reload_time	1000
 Build_time	1000
+Image		Cannon.png
+Base		Cannon_base.png
+Sound_effect	gun-gunshot-01.wav
+
+#Tower
+Type		MachineGun
+Damage		100
+Range		2000
+Reload_time	100
+Build_time	1000
+Image		Machine_gun.png
+Base		Machine_gun_base.png
+Sound_effect	gun-gunshot-01.wav
+
+#Tower
+Type		RocketLauncher
+Damage		500
+Range		1000
+Reload_time	2000
+Build_time	500
+Image		Rocket_launcher.png
+Base		Rocket_launcher_base.png
+Sound_effect	gun-gunshot-01.wav
+
+#Tower
+Type		DoubleRocketLauncher
+Damage		5000
+Range		1000
+Reload_time	2000
+Build_time	500
+Image		Double_rocket_launcher.png
+Base		Double_rocket_launcher_base.png
+Sound_effect	gun-gunshot-01.wav
+
+#Tower
+Type		Tank
+Damage		100
+Range		100
+Reload_time	10
+Build_time	500
+Image		Tank.png
+Base		Tank_base.png
+Sound_effect	gun-gunshot-01.wav
+
+#Tower
+Type		Leopard
+Damage		200
+Range		200
+Reload_time	50
+Build_time	500
+Image		Leopard.png
+Base		Leopard_base.png
 Sound_effect	gun-gunshot-01.wav
 
 ---Missiles---
 #Missile
-Type		Rocket
+Type		RocketLauncher
 Speed		10
 Radius		0
 Time		0
+Image		Missile.png
 
 #Missile
 Type		Cannon
 Speed		5
 Radius		200
 Time		100
+Image		Cannon_missile.png
+
+#Missile
+Type		MachineGun
+Speed		50
+Radius		50
+Time		0
+Image		Machine_gun_missile.png
+
+#Missile
+Type		DoubleRocketLauncher
+Speed		10
+Radius		1500
+Time		200
+Image		Double_missiles.png
+
+#Missile
+Type		Tank
+Speed		10
+Radius		50
+Time		0
+Image		Tank_missile.png
+
+#Missile
+Type		Leopard
+Speed		10
+Radius		50
+Time		0
+Image		Leopard_missile.png
 
 
 ---Waves--- ---Should be after Enemies---
 #Waves
+Plane		10
+Fighter		3
 KILLER1		5
 KILLER2		3
-KILLER1		10
-KILLER2		5
+KILLER3		10
+KILLER4		5
 KILLER1		20
 KILLER1		5
 KILLER2		3
