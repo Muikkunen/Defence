@@ -1,4 +1,4 @@
-from coordinates import *
+from coordinates import distance, new_location, direction
 
 class Enemy(object):
 	

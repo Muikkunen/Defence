@@ -4,24 +4,28 @@ from enemy import Enemy
 class Game():
 
 	def __init__ (self):
-		self.money = 0					# Integer to store the information of the player's money
-		self.points = 0					# Integer to store the information of the player's points
-		self.lives = 0					# Integer to store the information of the player's lives
-		self.time_between_waves = 0		# Integer to store the information of the time between waves
-		self.enemy_spawn_interval = 0
-		self.fps = 0					# Integer to store the frames per second value
+		# Integers to store informatioin
+		self.money = 0					# Player's money
+		self.points = 0					# Player's points
+		self.lives = 0					# Player's lives
+		self.time_between_waves = 0		# Time between waves
+		self.enemy_spawn_interval = 0	# Interval time between spawning enemies
+		self.fps = 0					# Frames per second
+
 		self.routes = []				# Container for different routes (E.g. Easy, Medium, Hard)
+		self.enemy_types = {}			# Dictionary for different enemy types
+		self.tower_types = {}			# Dictionary for different tower types
+		self.missile_types = {}			# Dictionary for different missile types
 
-		self.enemy_types = {}			# Dictionary for different enemies
-		self.tower_types = {}			# Dictionary for different towers
-		self.missile_types = {}			# Dictionary for different missiles
-
+	# Set up game's information
 	def setup(self, game_information):
 		self.money = game_information[0]
 		self.lives = game_information[1]
 		self.time_between_waves = game_information[2]
 		self.enemy_spawn_interval = game_information[3]
-		self.fps = game_information[4]
+
+		fps = 1000 / game_information[4]
+		self.fps = fps
 
 	# Game's getters
 	def get_money(self):
@@ -58,6 +62,7 @@ class Game():
 		return self.route_points
 
 
+	# Check which enemies have been killed
 	def check_dead_enemies(self):
 		for enemy in self.board.get_enemies():
 
@@ -94,7 +99,7 @@ class Game():
 		self.routes.append(new_route)
 
 
-	def lose_life(self):
+	def lose_life(self):					# When player cannot stop an enemy; it reaches its goal, player loses one life
 		self.lives -= 1
 		if self.lives <= 0:
 			print("Game over")
@@ -106,30 +111,14 @@ class Game():
 	def increase_points(self, points):		# When enemy is killed, increase player's points
 		self.points += points
 
-
-	"""def set_money(self, money):
-		self.money = money
-
-	def set_lives(self, lives):
-		self.lives = lives
-
-	def set_time_between_waves(self, time):
-		self.time_between_waves = time
-
-	def set_enemy_spawn_interval(self, time):
-		self.enemy_spawn_interval = time
-
-	def set_fps(self, fps):
-		self.fps = fps"""
-
 	def set_board(self, board):
 		self.board = board
 
 
-	def next_wave(self):
+	def next_wave(self):					# Get the enemies that the player must kill on the next wave
 		enemies_to_be_added = []
 		try:
-			current_wave = self.get_board().get_current_wave() - 1		# Get the current wave; minus 1, because lists in python start from 0
+			current_wave = self.get_board().get_current_wave() - 1	# Get the current wave; minus 1, because lists in python start from 0
 			waves = self.get_board().get_waves()
 			for amount in range(waves[current_wave][1]):
 				enemy_name = waves[current_wave][0]

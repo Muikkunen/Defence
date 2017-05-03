@@ -17,6 +17,7 @@ class Missile(object):
 		self.type = missile_information[0]
 		self.speed = missile_information[1]
 		self.radius = missile_information[2]
+		self.explosion_time = missile_information[3]
 
 		self.damage = None
 		self.location = None
@@ -54,7 +55,7 @@ class Missile(object):
 
 	# Move the missile, returns True if missile should be deleted (it has hit its target or missile target is not static
 	#	and the enemy has been deleted and False if otherwise
-	def move(self, enemies):
+	def move(self, enemies, gui):
 		if self.target == None:					# If target has been deleted, return True to indicate that the missile should be deleted
 			return True
 
@@ -74,7 +75,8 @@ class Missile(object):
 					if distance(self.target_location, enemy.get_location()) <= self.radius: 
 						enemy.reduce_hitpoints(self.damage)
 
-				print("draw explosion here")
+				gui.add_explosion_graphics_item(self.target_location, self.type, self.explosion_time)
+
 				return True 					# Return True to indicate that the missile has hit its target and should be deleted
 			else:
 				self.target.reduce_hitpoints(self.damage)

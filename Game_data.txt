@@ -25,7 +25,7 @@ Money		1000
 Lives		10
 Time		1000
 Interval	2000
-FPS		16
+FPS		60
 
 ---Board size---
 #Board		
@@ -77,7 +77,7 @@ Worth		100
 ---Towers---
 #Tower
 Type		Rocket
-Damage		20
+Damage		10
 Range		1000
 Reload_time	2000
 Build_time	500
@@ -85,7 +85,7 @@ Sound_effect	gun-gunshot-01.wav
 
 #Tower
 Type		Cannon
-Damage		200
+Damage		10
 Range		2000
 Reload_time	1000
 Build_time	1000
@@ -96,11 +96,13 @@ Sound_effect	gun-gunshot-01.wav
 Type		Rocket
 Speed		10
 Radius		0
+Time		0
 
 #Missile
 Type		Cannon
 Speed		5
 Radius		200
+Time		100
 
 
 ---Waves--- ---Should be after Enemies---

@@ -1,8 +1,44 @@
 ---Highscores---
-#1
-Name		Challenge 1
-Level		37
+Even though this is a text file, information
+ is stored as it would be in a table.
+ The table information is as stated here:
 
-#2
-Name		Challenge 2
-Level
+Name:		Level:		Points:
+
+---Comments end here---
+
+#Easy
+Testi1		10		1000000000
+Testi2		9		200000000
+Testi3		8		30000000
+Testi4		7		4000000
+Testi5		6		500000
+Testi6		5		60000
+Testi7		4		7000
+Testi8		3		800
+Testi9		2		90
+Testi10		1		10
+
+#Medium
+Testi1	 	10		1000000000
+Testi2		9		200000000
+Testi3		8		30000000
+Testi4		7		4000000
+Testi5		6		500000
+Testi6		5		60000
+Testi7		4		7000
+Testi8		3		800
+Testi9		2		90
+Testi10		1		10
+
+#Hard
+Testi1		10		1000000000
+Testi2		9		200000000
+Testi3		8		30000000
+Testi4		7		4000000
+Testi5		6		500000
+Testi6		5		60000
+Testi7		4		7000
+Testi8		3		800
+Testi9		2		90
+Testi10		1		10

@@ -4,6 +4,7 @@ from missile import Missile
 from enemy import Enemy
 #from tower import Tower
 from setup import Setup
+from load_high_scores import LoadHighScores
 from gui import GUI
 
 from PyQt5.QtWidgets import QApplication
@@ -11,26 +12,11 @@ from PyQt5.QtWidgets import QApplication
 
 def main():
 	# File names, which specify where the game information and high scores are stored
-	game_data = "Game_data_1.0.txt"
+	game_data = "Game_data.txt"
 	high_scores_data = "High_scores.txt"
 
-	game = Setup().load_all(game_data)			# Load game information from text file
-	#high_scores = Load_high_scores(high_scores_data)			# Load high scores from text file
-	#gui = GUI()								# Initialize GUI
-
-	"""
-	# Loop that allows player to navigate between main menu, highscores and playing
-	while True:
-		if main_menu():							# If Main menu returns true, move on to choose difficulty
-			route = select_route(gui)			# Call for select_route() to select the difficulty
-			score = play(gui, game, route)		# Start playing on selected difficulty. Function returns players points and reached level as list
-			add_new_high_score(high_scores_data, route, score)	# Add new high score to certain level if it is greater than the lowest on certain level
-		else:
-			high_scores(gui, high_scores)		# View the high scores of all levels
-	"""
-
-
-	#game.board.current_wave(game.board.waves[0])
+	game = Setup().load_all(game_data)							# Load game information from text file
+	high_scores = LoadHighScores().load(high_scores_data)		# Load information for high scores from text file
 
 	game.get_board().set_route_points(game.routes[1][1])
 	game.get_board().add_route()
@@ -109,22 +95,9 @@ def main():
 	# Every Qt application must have one instance of QApplication.--------------------------------------------REMOVE
 	global app # Prevent crash on exit
 	app = QApplication(sys.argv)
-	gui = GUI(game)
+	gui = GUI(game, high_scores)
 
 	# Start the Qt event loop. (i.e. make it possible to interact with the gui)--------------------------------------------REMOVE
 	sys.exit(app.exec_())
-
-
-	"""
-	for tower_type in game.get_tower_types():
-		tower = game.get_tower_types()[tower_type]
-		tower.shoot(game.get_board().get_enemies[0])
-		print(game.tower_types[tower].get_damage())
-		print(game.tower_types[tower].get_shoot_range())"""
-
-
-	#missile = Missile("Cannon", 50)
-	#missile.Initialize(game.get_tower_types()[CANNON], game.get_enemy_types()[KILLER1])
-
 
 main()

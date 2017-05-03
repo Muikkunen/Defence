@@ -6,43 +6,20 @@ from enemy import Enemy
 from tower import Tower
 from missile import Missile
 
+from loader_function import EOFReached, get_current_information
+
 class CorruptedGameData(Exception):
 	def __init__ (self, message):
 		super(CorruptedGameData, self).__init__(message)
 
-class EOFReached(Exception):
-	def __init__ (self, message):
-		super(EOFReached, self).__init__(message)
-
 class Setup(object):
-
-	def get_current_information(self, file):
-
-		# Iterate through file until information has been found
-		while True:
-			current_line = file.readline()
-
-			# If EOF has been reached, use exception to return to the code that called the 'load_game' function
-			if current_line == "":
-				raise EOFReached("File completely read")
-
-			# Split line to parts using whitespace as text divider
-			current_information = current_line.split()
-
-			# Pass empty lines and lines containing only whitespace
-			if current_information == []:
-				continue
-
-			# Return gathered information
-			return current_information
-
 
 	def load_waves(self, file, game):
 		# In order to keep the game data file as simple as possible, this function contains additional
 		# 	operation to check whether all waves have been read
 		while True:
 			current_line_last_position = file.tell()
-			current_line = self.get_current_information(file)
+			current_line = get_current_information(file)
 
 			# Return if the first character of the line is '-' thus meaning that all waves have been read
 			if current_line[0][0] == "-":
@@ -61,7 +38,7 @@ class Setup(object):
 					return
 
 			file.seek(current_line_last_position)
-			current_line = self.get_current_information(file)
+			current_line = get_current_information(file)
 
 			# Examine that type is defined in game.enemy_types
 			if current_line[0] in game.get_enemy_types():
@@ -72,10 +49,10 @@ class Setup(object):
 
 
 	def load_missile(self, file, game):
-		missile_type, speed, radius = (None,) * 3
+		missile_type, speed, radius, time = (None,) * 4
 
 		while True:
-			current_line = self.get_current_information(file)	
+			current_line = get_current_information(file)	
 
 			if current_line[0] == "Type":
 				missile_type = current_line[1]
@@ -83,9 +60,11 @@ class Setup(object):
 				speed = int(current_line[1])
 			elif current_line[0] == "Radius":
 				radius = int(current_line[1])
+			elif current_line[0] == "Time":
+				time = float(current_line[1])
 
-			if None not in (missile_type, speed, radius):
-				missile_information = [missile_type, speed, radius]
+			if None not in (missile_type, speed, radius, time):
+				missile_information = [missile_type, speed, radius, time]
 				game.add_missile_type(missile_type, missile_information)
 				return
 
@@ -93,7 +72,7 @@ class Setup(object):
 		tower_type, damage, shoot_range, reload_time, build_time, sound_effect = (None,) * 6
 
 		while True:
-			current_line = self.get_current_information(file)
+			current_line = get_current_information(file)
 
 			if current_line[0] == "Type":
 				tower_type = current_line[1]
@@ -118,7 +97,7 @@ class Setup(object):
 		enemy_type, name, hitpoints, armour, speed, worth = (None,) * 6
 
 		while True:
-			current_line = self.get_current_information(file)	
+			current_line = get_current_information(file)	
 
 			if current_line[0] == "Type":
 				enemy_type = current_line[1]
@@ -144,7 +123,7 @@ class Setup(object):
 		route_points = []		# Empty container for route points
 
 		while True:
-			current_line = self.get_current_information(file)
+			current_line = get_current_information(file)
 
 			# When name has been read, the function expects that the route has also been read
 			if current_line[0] == "Name":
@@ -168,7 +147,7 @@ class Setup(object):
 		width, height, square_size = (None,) * 3
 
 		while True:
-			current_line = self.get_current_information(file)
+			current_line = get_current_information(file)
 
 			# Set board measurements to the variables
 			if current_line[0] == "Width":
@@ -188,7 +167,7 @@ class Setup(object):
 		money, lives, time, interval, fps = (None,) * 5
 
 		while True:
-			current_line = self.get_current_information(file)
+			current_line = get_current_information(file)
 
 			if current_line[0] == "Money":
 				money = int(current_line[1])
@@ -225,7 +204,7 @@ class Setup(object):
 			file = open(input, "r")
 
 			while True:
-				current_information = self.get_current_information(file)
+				current_information = get_current_information(file)
 
 				# Find certain information block
 				if current_information[0] == "#Game":

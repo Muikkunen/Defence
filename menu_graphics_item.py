@@ -20,5 +20,4 @@ class MenuGraphicsItem(QtWidgets.QGraphicsPixmapItem):
 		if self.name == "Play":
 			self.GUI.play()
 		elif self.name == "High Scores":
-			print("TOTEUTA")
-			#self.GUI.high_scores()
+			self.GUI.show_high_scores()

@@ -1,19 +1,21 @@
 from PyQt5 import QtWidgets, QtCore, QtGui
-from PyQt5.QtWidgets import QPushButton, QGraphicsSceneMouseEvent
+from PyQt5.QtWidgets import QPushButton, QGraphicsSceneMouseEvent, QGraphicsTextItem
 from PyQt5.QtGui import QBrush, QColor, QFont
 from PyQt5.QtCore import QTimer
 
 from enemy_graphics_item import EnemyGraphicsItem
 from tower_graphics_item import TowerGraphicsItem
 from missile_graphics_item import MissileGraphicsItem
+from explosion_graphics_item import ExplosionGraphicsItem
 from board_graphics_item import BoardGraphicsItem
 from menu_graphics_item import MenuGraphicsItem
+from high_scores_text_item import HighScoresTextItem
 
 from add_board_graphics import add_board_graphics
 
 class GUI(QtWidgets.QMainWindow):
 
-	def __init__(self, game):
+	def __init__(self, game, high_scores):
 		super().__init__()
 		self.scene = QtWidgets.QGraphicsScene()
 		self.window_size = [1900, 1050]
@@ -35,13 +37,15 @@ class GUI(QtWidgets.QMainWindow):
 		self.setWindowTitle("Defence")
 		#self.show()
 
-		self.board_graphics_items = []
-		self.enemy_graphics_items = []
-		self.tower_base_graphics_items = []
-		self.tower_graphics_items = []
-		self.missile_graphics_items = []
+		self.board_graphics_items 		=	[]
+		self.enemy_graphics_items 		=	[]
+		self.tower_base_graphics_items 	= 	[]
+		self.tower_graphics_items 		=	[]
+		self.missile_graphics_items 	=	[]
+		self.explosion_graphics_items 	= 	[]
 
 		self.game = game
+		self.high_scores = high_scores
 		self.square_size = game.get_board().get_square_size()
 
 		self.main_menu()
@@ -104,7 +108,7 @@ class GUI(QtWidgets.QMainWindow):
 			self.game.get_board().set_enemies_added()
 
 		enemy = self.game.get_board().add_enemy(enemy, self.game.get_board().get_enemy_start_location())
-		enemy_graphics_item = EnemyGraphicsItem(enemy, self.game.get_board().get_square_size())
+		enemy_graphics_item = EnemyGraphicsItem(enemy, self.square_size)
 		self.enemy_graphics_items.append(enemy_graphics_item)
 		self.scene.addItem(enemy_graphics_item)
 		self.new_enemy_timer.setSingleShot(True)
@@ -112,16 +116,22 @@ class GUI(QtWidgets.QMainWindow):
 
 
 	def add_tower_base_graphics_item(self, tower):
-		tower_base_graphics_item = TowerGraphicsItem(tower, self.game.get_board().get_square_size())
+		tower_base_graphics_item = TowerGraphicsItem(tower, self.square_size)
 		self.tower_base_graphics_items.append(tower_base_graphics_item)
 		self.scene.addItem(tower_base_graphics_item)
 
+
+	def add_explosion_graphics_item(self, location, explosion_type, time):
+		explosion_graphics_item = ExplosionGraphicsItem(location, explosion_type, time, self.square_size)
+		self.explosion_graphics_items.append(explosion_graphics_item)
+		self.scene.addItem(explosion_graphics_item)
 
 
 	def update_all(self):
 		self.update_enemies()										# Firstly the enemies move
 		self.update_towers(self.game.get_board().get_towers())		# Then  the towers shoot according to their targets
 		self.update_missiles(self.game.get_board().get_missiles())	# Lastly the missiles that were created as well as the previously created ones move
+		self.update_explosions()
 
 
 	def update_enemies(self):
@@ -159,14 +169,14 @@ class GUI(QtWidgets.QMainWindow):
 		for tower in towers:
 			missile = tower.shoot()
 			if missile != None:
-				missile_graphics_item = MissileGraphicsItem(missile, self.game.get_board().get_square_size())
+				missile_graphics_item = MissileGraphicsItem(missile, self.square_size)
 				self.missile_graphics_items.append(missile_graphics_item)
 				self.scene.addItem(missile_graphics_item)
 
 		for tower_base_graphics_item in self.tower_base_graphics_items:
 			tower_base_graphics_item.update_graphics()
 			if tower_base_graphics_item.build():
-				tower_graphics_item = TowerGraphicsItem(tower_base_graphics_item.get_tower(), self.game.get_board().get_square_size())
+				tower_graphics_item = TowerGraphicsItem(tower_base_graphics_item.get_tower(), self.square_size)
 				self.tower_graphics_items.append(tower_graphics_item)
 				self.scene.addItem(tower_graphics_item)
 
@@ -175,7 +185,7 @@ class GUI(QtWidgets.QMainWindow):
 
 
 	def update_missiles(self, missiles):
-		missiles[:] = [missile for missile in missiles if not missile.move(self.game.get_board().get_enemies())]
+		missiles[:] = [missile for missile in missiles if not missile.move(self.game.get_board().get_enemies(), self)]
 
 		new_missile_graphics_items = []
 
@@ -188,17 +198,32 @@ class GUI(QtWidgets.QMainWindow):
 
 		self.missile_graphics_items = new_missile_graphics_items
 
+	def update_explosions(self):
+		items_to_be_removed = []
+		for item in self.explosion_graphics_items:
+			if item.time_passed() <= 0:
+				items_to_be_removed.append(item)
+
+		for item in items_to_be_removed:
+			self.scene.removeItem(item)
+			self.explosion_graphics_items.remove(item)
+
 
 	def main_menu(self):
-		#font = QFont("Comic Sans", 75)
-		#color = QColor("White")
-		#self.play_text_item = MenuGraphicsItem(self, self.scene, "Play", font, color, 500, -3000)
+		font = QFont("Comic Sans", 50)
+		color = QColor("White")
+		text = "Click one of the icons to proceed"
+		self.menu_text = QGraphicsTextItem(text)
+		self.menu_text.setFont(font)
+		self.menu_text.setDefaultTextColor(color)
+		self.menu_text.setPos(0, 900)
+		self.scene.addItem(self.menu_text)
 
 
-		play_item = MenuGraphicsItem(self, "images/play.png", self.window_size[0] / 4, self.window_size[1] / 2, "Play")
-		high_scores_item = MenuGraphicsItem(self, "images/high_scores.png", self.window_size[0] / 4 * 3, self.window_size[1] / 2, "High Scores")
-		self.scene.addItem(play_item)
-		self.scene.addItem(high_scores_item)
+		self.play_item = MenuGraphicsItem(self, "images/play.png", self.window_size[0] / 4, self.window_size[1] / 2, "Play")
+		self.high_scores_item = MenuGraphicsItem(self, "images/high_scores.png", self.window_size[0] / 4 * 3, self.window_size[1] / 2, "High Scores")
+		self.scene.addItem(self.play_item)
+		self.scene.addItem(self.high_scores_item)
 
 		#self.high_scores_text_item = MenuGraphicsItem(self, self.scene, "High Scores", font, color)
 
@@ -223,10 +248,12 @@ class GUI(QtWidgets.QMainWindow):
 
 
 	def play(self):
+		self.scene.removeItem(self.menu_text)				# Remove menu's text field fron scene
+		self.scene.removeItem(self.play_item)				# Remove Play text button from scene
+		self.scene.removeItem(self.high_scores_item)		# Remove High Scores text button from scene
+
 		self.enemies_to_be_added = []
 		self.new_enemy_timer = QTimer()
-		#self.scene.removeItem(self.play_text_item)			# Remove Play text button from scene
-		#self.scene.removeItem(self.high_scores_text_item)	# Remove High Scores text button from scene
 
 		self.add_all_graphics()
 		self.update_all()
@@ -261,4 +288,38 @@ class GUI(QtWidgets.QMainWindow):
 		#self.vertical_board.addWidget(self.view)
 
 
-	#def show_high_scores():
+	def show_high_scores(self):
+		high_scores_text_items = []
+		self.scene.removeItem(self.menu_text)				# Remove menu's text field fron scene
+		self.scene.removeItem(self.play_item)				# Remove Play text button from scene
+		self.scene.removeItem(self.high_scores_item)		# Remove High Scores text button from scene
+		
+		headers = ["Easy", "Medium", "Hard"]
+		x = 20
+		
+		for header in headers:
+			text_item = HighScoresTextItem(header, 30, x, 200)
+			high_scores_text_items.append(text_item)
+			self.scene.addItem(text_item)
+			x += 600
+
+		font_size = 15
+		y = 300
+		x_increment = 0
+
+		for header in headers:
+			for scores in self.high_scores[header]:
+				x = 20 + x_increment
+				for text in scores:
+					text_item = HighScoresTextItem(text, font_size, x, y)
+					high_scores_text_items.append(text_item)
+					self.scene.addItem(text_item)
+					if scores.index(text) == 0:
+						x += 225
+					elif scores.index(text) == 1:
+						x += 120
+
+					#x += text_item.textWidth() + 100
+				y += font_size + 30
+			x_increment += 600
+			y = 300
