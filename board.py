@@ -25,7 +25,16 @@ class Board(object):
 
 		self.current_wave = 0
 		self.adding_enemies = False
-		
+		self.difficulty = None
+
+	def initialize(self):
+		self.enemies = []
+		self.towers = []
+		self.missiles = []
+		self.route_points = []
+		self.current_wave = 0
+		self.adding_enemies = False
+		self.difficulty = None		
 
 
 	def get_width(self):
@@ -71,29 +80,21 @@ class Board(object):
 	def amount_of_enemies_on_next_wave(self):
 		return len(self.waves[self.current_wave])
 
+	def get_difficulty(self):
+		return self.difficulty
+
 	"""def get_waves(self):
 		return self.waves"""
 
 
-	def set_route_points(self, route_points):
+	def set_route_points(self, route_points, difficulty):
 		self.route_points = route_points
+		self.difficulty = difficulty
 
 
 	def add_wave(self, enemy, amount):
 		wave = [enemy, amount]
 		self.waves.append(wave)
-
-
-
-		"""sub_list_of_enemies = []
-		for i in range(amount):
-			sub_list_of_enemies.append(enemy)
-		self.waves.append(sub_list_of_enemies)"""
-
-	"""
-	def current_wave(self, wave): #---------------------------NOT READY-----------------------------------
-		for enemy in range(wave):
-			self.enemies.append(enemy)"""
 
 
 	def add_tower(self, tower_information, position):
@@ -113,6 +114,7 @@ class Board(object):
 				self.towers.append(tower)
 				# Set Square's type to tower
 				self.squares[position[0]][position[1]].set_tower()
+				return tower
 			else:
 				print("Cannot add Tower to the Board")
 
@@ -166,6 +168,8 @@ class Board(object):
 						print("CANNOT ADD")										#----------------------- NOT IMPLEMENTED
 
 		self.enemy_start_location = list(self.route_points[0])		# Define the point where enemies should start
+
+
 
 
 	def kill_enemy(self, enemy):

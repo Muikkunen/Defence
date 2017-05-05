@@ -7,6 +7,11 @@ class Square(object):
 	def __init__ (self):
 		self._type = Square.EMPTY
 
+	def set_empty(self):
+		# Marks square as empty. This method is used for emptying the board and therefore does not care whether
+		# 	square is marked as route or tower
+		self._type = Square.EMPTY
+
 	def set_route(self):
 		# Marks square as route, if possible. Returns boolean value stating whether succesful or not
 		if self._type == 0:

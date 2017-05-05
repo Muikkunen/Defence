@@ -1,5 +1,6 @@
 from board import Board
 from enemy import Enemy
+from add_high_score import add_high_score
 
 class Game():
 
@@ -17,6 +18,7 @@ class Game():
 		self.tower_types = {}			# Dictionary for different tower types
 		self.missile_types = {}			# Dictionary for different missile types
 
+
 	# Set up game's information
 	def setup(self, game_information):
 		self.money = game_information[0]
@@ -26,6 +28,21 @@ class Game():
 
 		fps = 1000 / game_information[4]
 		self.fps = fps
+
+		self.money_initial = game_information[0]
+		self.lives_initial = game_information[1]
+
+	# Initialize game information
+	def initialize(self):
+		self.money = self.money_initial
+		self.lives = self.lives_initial
+		self.points = 0
+		self.get_board().initialize()
+
+		for squares_list in self.board.get_squares():
+			for square in squares_list:
+				square.set_empty()
+
 
 	# Game's getters
 	def get_money(self):
@@ -101,12 +118,15 @@ class Game():
 
 	def lose_life(self):					# When player cannot stop an enemy; it reaches its goal, player loses one life
 		self.lives -= 1
-		if self.lives <= 0:
-			print("Game over")
+		"""if self.lives <= 0:
+			print("Game over")"""
 
 
 	def increase_money(self, money):		# When enemy is killed, increase player's money
 		self.money += money
+
+	def buy(self, cost):					# When tower is bought, decrease player's money
+		self.money -= cost
 
 	def increase_points(self, points):		# When enemy is killed, increase player's points
 		self.points += points
@@ -124,7 +144,7 @@ class Game():
 			waves = self.get_board().get_waves()
 			for amount in range(waves[current_wave][1]):
 				enemy_name = waves[current_wave][0]
-				enemy = Enemy(self.enemy_types[enemy_name])	# Select the enemy's type from game's dictionary
+				enemy = Enemy(self.enemy_types[enemy_name])			# Select the enemy's type from game's dictionary
 				enemies_to_be_added.append(enemy)
 		except IndexError:
 			print("Trying to find too many enemies from a wave")

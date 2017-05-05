@@ -66,20 +66,6 @@ class Enemy(object):
 		if self.destination == None:
 			self.set_next_destination()
 
-		"""
-		# If the enemy should move vertically, set first_indicator to 0 and if horizontally, set it to 1
-		if self.location[0] == self.destination[0]:
-			first_indicator = 1
-		else:
-			first_indicator = 0
-
-		# If the enemy should move to positive coordinate direction (down or right) set indicator to 1
-		#	and if to negative coordinate direction (up or left) set it to -1
-		if self.location[first_indicator] < self.destination[first_indicator]:
-			second_indicator = 1
-		else:
-			second_indicator = -1"""
-
 		# Calculate the remaining distance between the current position and the next destination
 		remaining_distance = distance(self.location, self.destination)
 

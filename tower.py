@@ -21,11 +21,11 @@ class Tower(object):
 		self.shoot_range = tower_information[2]
 		self.reload_time = tower_information[3]
 		self.build_time = tower_information[4]
-		self.image = tower_information[5]
-		self.base_image = tower_information[6]
-		#self.sound_effect = QSound(sound_effect) REMOVE SOUNDS FROM GAME INFORMATION TEXT FILE!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+		self.cost = tower_information[5]
+		self.image = tower_information[6]
+		self.base_image = tower_information[7]
 		self.game = tower_information[8]
-		self.target_type = Tower.STRONGEST				# As default the tower shoots the enemy that is first released
+		self.target_type = Tower.FIRST					# As default the tower shoots the enemy that is first released
 		self.location = None							# Location will be set when player puts the tower to the board
 														# 	it defines the coordinates where the Tower is
 		self.reloading = False							# Indicate whether the tower is reloading or not
@@ -53,6 +53,9 @@ class Tower(object):
 
 	def get_build_time(self):
 		return self.build_time
+
+	def get_cost(self):
+		return self.cost
 
 	def get_image(self):
 		return self.image
@@ -103,13 +106,16 @@ class Tower(object):
 
 
 	def shoot_closest_enemy(self, enemies):
-		distance_to_selected_enemy = None	# Set variable for shortest distance
+		if self.target == None:
+			self.target = enemies[0]
+
+		distance_to_current_enemy = distance(self.location, self.target.get_location())
 		enemy_to_be_shot = enemies[0]		# Set variable to store the Enemy with shortest distance to Tower
 
 		# Use slicing to generate new list without first key to prevent from comparing first key to itself and
 		#	iterate through enemies to find the closest enemy
 		for enemy in enemies[1:]:
-			distance_to_current_enemy = distance(self.location, enemy.get_location())
+			distance_to_selected_enemy = distance(self.location, enemy.get_location()) # Set variable for shortest distance
 
 			# If the current distance is shorter than the distance to the selected Enemy, replace the selected distance with current distance
 			if distance_to_current_enemy < distance_to_selected_enemy:
@@ -179,3 +185,14 @@ class Tower(object):
 
 	def build(self):
 		self.building = False
+
+
+	def change_target_type(self):
+		if self.target_type == Tower.FIRST:
+			self.target_type = Tower.CLOSEST
+		elif self.target_type == Tower.CLOSEST:
+			self.target_type = Tower.STRONGEST
+		elif self.target_type == Tower.STRONGEST:
+			self.target_type = Tower.WEAKEST
+		elif self.target_type == Tower.WEAKEST:
+			self.target_type = Tower.FIRST

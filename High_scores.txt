@@ -1,44 +1,54 @@
 ---Highscores---
+
 Even though this is a text file, information
  is stored as it would be in a table.
+
  The table information is as stated here:
+
 
 Name:		Level:		Points:
 
+
+
 ---Comments end here---
 
+
 #Easy
-Testi1		10		1000000000
-Testi2		9		200000000
-Testi3		8		30000000
-Testi4		7		4000000
-Testi5		6		500000
-Testi6		5		60000
-Testi7		4		7000
-Testi8		3		800
-Testi9		2		90
-Testi10		1		10
+
+Testi1          10		1000000000
+Testi2          9		200000000
+
+Testi3          8		30000000
+Testi4          7		4000000
+Testi5          6		500000
+Testi6          5		6000
+Testi7          1		11000
+Samuli          16		3940
+asdfsadfasdf    15		2440
+Testi8          3		600
+Testi9          2		40
+Testi10         1		11
 
 #Medium
-Testi1	 	10		1000000000
-Testi2		9		200000000
-Testi3		8		30000000
-Testi4		7		4000000
-Testi5		6		500000
-Testi6		5		60000
-Testi7		4		7000
-Testi8		3		800
-Testi9		2		90
-Testi10		1		10
+Testi1          10		1000000000
+Testi2          9		200000000
+Testi3          8		30000000
+Testi4          7		4000000
+Testi5          6		500000
+Testi6          5		6000
+Testi7          1		401
+Testi8          3		300
+Testi9          2		40
+Testi10         1		11
 
 #Hard
-Testi1		10		1000000000
-Testi2		9		200000000
-Testi3		8		30000000
-Testi4		7		4000000
-Testi5		6		500000
-Testi6		5		60000
-Testi7		4		7000
-Testi8		3		800
-Testi9		2		90
-Testi10		1		10
+Testi1          10		1000000000
+Testi2          9		200000000
+Testi3          8		30000000
+Testi4          7		4000000
+Testi5          6		500000
+Testi6          5		6000
+Testi7          1		700
+Testi8          3		600
+Testi9          2		40
+Testi10         1		11

@@ -22,8 +22,8 @@ Board		70%
 ---Game initial values---
 #Game
 Money		1000
-Lives		10
-Time		1000
+Lives		1
+Time		5000
 Interval	2000
 FPS		60
 
@@ -34,28 +34,37 @@ Height		12
 Square_size	64
 
 
----Routes--- ---Should be after Board size---
-#Route
-0		9
-10		9
-10		8
-15		8
-15		9
-29		9
-Name		Medium
+---Routes---
+Should be after Board size and the order should be; Easy, Medium, Hard
 
 #Route
 0		2
 4		2
 4		9
-12		9
+8		9
+8		2
 12		2
+12		9
+16		9
+16		2
 20		2
 20		9
-25		9
-25		2
+24		9
+24		2
 29		2
 Name		Easy
+
+#Route
+0		3
+20		3
+20		8
+0		8
+Name		Medium
+
+#Route
+0		6
+29		6
+Name		Hard
 
 ---Enemies---
 #Enemy
@@ -64,7 +73,7 @@ Name		Name_KILLER1 Should enemy have a name?
 Hitpoints	100
 Armour		0
 Speed		1
-Worth		50
+Worth		10
 Image		Enemy_1.png
 Shadow		None
 
@@ -74,17 +83,17 @@ Name		Name_KILLER2 Should enemy have a name?
 Hitpoints	200
 Armour		0
 Speed		2
-Worth		100
+Worth		20
 Image		Enemy_2.png
 Shadow		None
 
 #Enemy
 Type		KILLER3
 Name		Name_KILLER3 Should enemy have a name?
-Hitpoints	2000
+Hitpoints	1000
 Armour		0
 Speed		3
-Worth		100
+Worth		200
 Image		Enemy_3.png
 Shadow		None
 
@@ -94,27 +103,27 @@ Name		Name_KILLER4 Should enemy have a name?
 Hitpoints	2000
 Armour		0
 Speed		4
-Worth		100
+Worth		500
 Image		Enemy_4.png
 Shadow		None
 
 #Enemy
 Type		Plane
 Name		Name_KILLER4 Should enemy have a name?
-Hitpoints	20000
+Hitpoints	1000
 Armour		0
-Speed		4
-Worth		100
+Speed		5
+Worth		1000
 Image		Plane.png
 Shadow		Plane_shadow.png
 
 #Enemy
 Type		Fighter
 Name		Name_KILLER4 Should enemy have a name?
-Hitpoints	2000
-Armour		0
-Speed		4
-Worth		100
+Hitpoints	5000
+Armour		100
+Speed		8
+Worth		1000
 Image		Fighter.png
 Shadow		Fighter_shadow.png
 
@@ -122,63 +131,63 @@ Shadow		Fighter_shadow.png
 
 #Tower
 Type		Cannon
-Damage		100
+Damage		200
 Range		2000
 Reload_time	1000
-Build_time	1000
+Build_time	5000
+Cost		200
 Image		Cannon.png
 Base		Cannon_base.png
-Sound_effect	gun-gunshot-01.wav
 
 #Tower
 Type		MachineGun
-Damage		100
-Range		2000
+Damage		1
+Range		1000
 Reload_time	100
 Build_time	1000
+Cost		250
 Image		Machine_gun.png
 Base		Machine_gun_base.png
-Sound_effect	gun-gunshot-01.wav
 
 #Tower
 Type		RocketLauncher
 Damage		500
-Range		1000
+Range		500
 Reload_time	2000
 Build_time	500
+Cost		1000
 Image		Rocket_launcher.png
 Base		Rocket_launcher_base.png
-Sound_effect	gun-gunshot-01.wav
 
 #Tower
 Type		DoubleRocketLauncher
-Damage		5000
+Damage		1000
 Range		1000
 Reload_time	2000
-Build_time	500
+Build_time	10000
+Cost		2000
 Image		Double_rocket_launcher.png
 Base		Double_rocket_launcher_base.png
-Sound_effect	gun-gunshot-01.wav
 
 #Tower
 Type		Tank
-Damage		100
+Damage		20
 Range		100
-Reload_time	10
+Reload_time	50
 Build_time	500
+Cost		1000
 Image		Tank.png
 Base		Tank_base.png
-Sound_effect	gun-gunshot-01.wav
 
 #Tower
 Type		Leopard
-Damage		200
+Damage		100
 Range		200
 Reload_time	50
-Build_time	500
+Build_time	5000
+Cost		2000
 Image		Leopard.png
 Base		Leopard_base.png
-Sound_effect	gun-gunshot-01.wav
 
 ---Missiles---
 #Missile
@@ -225,26 +234,34 @@ Image		Leopard_missile.png
 
 
 ---Waves--- ---Should be after Enemies---
+
 #Waves
-Plane		10
-Fighter		3
+KILLER1		3
 KILLER1		5
 KILLER2		3
+KILLER1		10
+KILLER2		5
+KILLER3		3
+KILLER2		10
 KILLER3		10
-KILLER4		5
+KILLER4		3
+KILLER2		20
+KILLER3		20
+Plane		1
+KILLER4		10
+Fighter		1
 KILLER1		20
-KILLER1		5
-KILLER2		3
-KILLER1		10
-KILLER2		5
-KILLER1		20
-KILLER1		5
-KILLER2		3
-KILLER1		10
-KILLER2		5
-KILLER1		20
-KILLER1		5
-KILLER2		3
-KILLER1		10
-KILLER2		5
-KILLER1		20
+KILLER2		15
+KILLER3		30
+KILLER2		20
+KILLER3		20
+KILLER4		10
+KILLER2		40
+KILLER3		40
+Plane		10
+KILLER4		20
+Fighter		10
+Plane		100
+Fighter		100
+Plane		1000
+Fighter		1000

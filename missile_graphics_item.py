@@ -21,13 +21,11 @@ class MissileGraphicsItem(QtWidgets.QGraphicsPixmapItem):
 		self.height = self.pixmap().height()
 
 		self.setTransformOriginPoint(self.width / 2, self.height / 2)
-
 		self.update_graphics()
 
 
 	def get_missile(self):
 		return self.missile
-
 
 	def update_graphics(self):
 		self.updatePosition()
@@ -35,8 +33,7 @@ class MissileGraphicsItem(QtWidgets.QGraphicsPixmapItem):
 
 	def updatePosition(self):
 		location = self.missile.get_location()
-		self.setPos(location[0]  - ((self.width - self.square_size) / 2), location[1] - ((self.height - self.square_size) / 2))
-
+		self.setPos(location[0] - (self.width / 2), location[1] - (self.height / 2))
 
 	def updateRotation(self):
 		rotation = self.missile.get_degrees()

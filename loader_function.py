@@ -12,6 +12,7 @@ def get_current_information(file):
 
 		# If EOF has been reached, use exception to return to the code that called the 'load_game' function
 		if current_line == "":
+			file.close()
 			raise EOFReached("File completely read")
 
 		# Split line to parts using whitespace as text divider

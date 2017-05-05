@@ -71,7 +71,7 @@ class Setup(object):
 				return
 
 	def load_tower(self, file, game):
-		tower_type, damage, shoot_range, reload_time, build_time, image, base_image, sound_effect = (None,) * 8
+		tower_type, damage, shoot_range, reload_time, build_time, cost, image, base_image = (None,) * 8
 
 		while True:
 			current_line = get_current_information(file)
@@ -86,6 +86,8 @@ class Setup(object):
 				reload_time = int(current_line[1])
 			elif current_line[0] == "Build_time":
 				build_time = int(current_line[1])
+			elif current_line[0] == "Cost":
+				cost = int(current_line[1])
 			elif current_line[0] == "Image":
 				image = current_line[1]
 			elif current_line[0] == "Base":
@@ -94,8 +96,8 @@ class Setup(object):
 				sound_effect = current_line[1]
 
 
-			if None not in (tower_type, damage, shoot_range, reload_time, build_time, image, base_image, sound_effect):
-				tower_information = [tower_type, damage, shoot_range, reload_time, build_time, image, base_image, sound_effect, game]
+			if None not in (tower_type, damage, shoot_range, reload_time, build_time, cost, image, base_image):
+				tower_information = [tower_type, damage, shoot_range, reload_time, build_time, cost, image, base_image, game]
 				game.add_tower_type(tower_type, tower_information)
 				return
 
@@ -246,4 +248,5 @@ class Setup(object):
 			raise CorruptedGameData("File missing or corrupted")
 
 		except EOFReached:
+			file.close()
 			return game
