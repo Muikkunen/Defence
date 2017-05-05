@@ -1,0 +1,205 @@
+\documentclass{article}
+\usepackage[utf8]{inputenc}
+
+\title{Projektisuunnitelma}
+\author{Joel Lavikainen }
+\date{Maaliskuu 2017}
+
+\usepackage{amsmath}
+\usepackage{tikz}
+\usetikzlibrary{decorations.pathreplacing}
+\usepackage{graphicx}
+\usepackage[finnish]{babel}
+\usepackage{tocloft}
+\usepackage{listings}
+\usepackage{float}
+
+
+
+\renewcommand{\cftsecleader}{\cftdotfill{\cftdotsep}}
+
+\newcommand\BrText[2]{%
+  \par\smallskip
+   \noindent\makebox[\textwidth][r]{$\text{#1}\left\{
+    \begin{minipage}{\textwidth}
+    #2
+    \end{minipage}
+  \right.\nulldelimiterspace=0pt$}\par\smallskip
+}    
+
+\begin{document}
+\begin{titlepage}
+\raggedright
+    {\bfseries Aalto-yliopisto \par}
+    {\bfseries Sähkötekniikan korkeakoulu \par}
+    {\bfseries Elektroniikka ja Sähkötekniikka \par}
+    \vspace{4cm}
+\centering
+    {\scshape\huge Projektisuunnitelma \par}
+    \vspace{1cm}
+    {\scshape\large Tornipuolustuspeli \par}
+    \vspace{2cm}
+    {\bfseries\large Joel Lavikainen \par}
+    \vspace{0,1cm}
+    {\bfseries\large 479848 \par}
+    \vspace{0,1cm}
+    {\bfseries\large 3. vuosikurssi \par}
+    \vspace{0,1cm}
+    {\bfseries\large 12.3.2017 \par}
+    \vspace{6cm}
+
+\end{titlepage}
+
+
+
+\clearpage
+\pagenumbering{roman}
+\tableofcontents
+
+\clearpage
+\pagenumbering{arabic}
+
+\section{Ohjelman rakennesuunnitelma}
+
+Peliin on tarkoitus toteuttaa graafinen käyttöliittymä käyttämällä PyQT5-kir\-jas\-to\-a. Tulevaisuuden varalta haluan kuitenkin pitää pelilogiikan ja graafisen käyttö\-liittymän erillään toisistaan, jolloin peli voidaan jakaa karkeasti kahteen osa-alueeseen: pelilogiikkaan ja graafiseen käyttöliittymään.
+
+\subsection{Pelilogiikka}
+
+Pelilogiikan kannalta tärkeitä luokkia ovat:
+
+\begin{itemize}
+    \item Torni (Tower)
+    \item Vihollinen (Enemy)
+    \item Pelimaailma (GameWorld)
+    \item Ruutu (Square)
+\end{itemize}
+
+\subsubsection{Pelimaailma}
+
+\noindent Pelimaailma toimii yleiskuvauksena pelikentästä, ja se hallitsee pelin kulkua, vihollisia ja torneja. Pelimaailma pitää kirjaa kentän ruuduista, elossa olevista vihollisista ja torneista. Kentän tiedot luetaan pelin alussa kenttä\-tiedostosta ja pelimaailma olioon alustetaan listaan vastaavat ruutu oliot, kuin kenttä\-tiedostossa määritetään. Kenttätiedostosta luetaan myös vihollisaaltojen tiedot, jotka alustetaan pelimaailma olioon listaan. \\
+
+
+\noindent Keskeisiä metodeja pelimaailmalle ovat:
+\begin{itemize}
+    \item add\_tower(), käytetään uusien tornien kenttään lisäämiseksi
+    \item add\_enemy(), käytetään vihollisten lisäämiseen aloitusruutuun
+    \item remove\_dead\_enemies(), metodi tarkistaa mitkä viholliset ovat kuolleita ja poistaa nämä
+    \item next\_wave(), käynnistää seuraavan kierroksen kentässä
+\end{itemize}
+
+\subsubsection{Torni}
+
+\noindent Tornipuolustuspelin tärkein olio eli torni sisältää tietoa tornin ominaisuuksista ja sijainnista. Torni on myös tietoinen pelimaailmasta, johon se kuuluu. Myös tornin mahdolliset päivitykset ja nykyinen päivitystaso säilytetään torni oliossa. Eri tornit ja niitä vastaavat tiedot luetaan erillisestä konfiguraatiotiedostosta, joka on xml muodossa. Tämä mahdollistaa uusien tornien luonnin ja tasapainottamisen lennosta ilman, että arvoja oltaisiin kovakoodattu. Tornin tyypin kuvausta varten on olemassa lueteltu tyyppi TowerType. Myös eri päivitysten kuvaamista varten käytetään lueteltua tyyppiä UpgradeType. \\
+
+\newpage
+\noindent Keskeisiä metodeja tornille ovat:
+\begin{itemize}
+    \item attack(), tornin hyökkäysmetodi. Tästä voi olla eri variaatioita riippuen tornin tyypistä
+    \item upgrade(), päivittää halutun päivityksen torniin
+\end{itemize}
+
+\subsubsection{Vihollinen}
+
+\noindent Pelissä kentällä olevaa reittiä pitkin kulkevat viholliset toteutetaan omana olionaan. Kyseinen olio sisältää tietoa vihollisen elämistä, nopeudesta, paikasta ja rahapalkkiosta. Vastaavasti kuin torneilla viholliset luetaan omasta konfiguraatiotiedostostaan, joka on myös xml formaatissa. Vihollisen eri tyyppien kuvaamiseen on käytössä lueteltu tyyppi EnemyType. \\
+
+\noindent Keskeisiä metodeja viholliselle ovat:
+\begin{itemize}
+    \item move(), vihollinen liikkuu seuraavaan ruutuun ennaltamäärätyllä reitillä
+    \item damage(), kutsutaan, kun torni tekee vauriota viholliseen. Muuttaa myös vihollisen kuolleeksi, jos elämät menevät nollaan
+    \item is\_at\_goal(), tarkastaa onko vihollinen päässyt maaliruutuun
+\end{itemize}
+
+\subsubsection{Ruutu}
+
+\noindent Ruutu on kuvaus pelikentän ruudukon yhdestä ruudusta. Ruudun eri tyyppejä kuvataan luetellulla tyypillä SquareType. Ruudun tyyppejä ovat reitti-, alku- ja maaliruudut sekä muut ruudut, joihin voidaan sijoittaa torneja. Ruutuihin sisällytetään ruudun päällä oleva olio eli joko torni tai vihollinen. Viholliset syntyvät alkuruutuun ja tuhoutuvat maaliruudussa vähentäen pelaajan pisteitä. \\
+
+\noindent Keskeisiä metodeja ruudulle ovat:
+\begin{itemize}
+    \item set\_tower(), käytetään tornin asettamiseen ruutuun
+    \item set\_enemy(), vastaava kuin set\_tower(), mutta viholliselle
+\end{itemize}
+
+\subsection{Graafinen käyttöliittymä}
+Graafisen käyttöliittymän kannalta tärkeitä luokkia ovat:
+
+\begin{itemize}
+    \item GUI
+    \item Ammus (Projectile)
+    \item TowerGraphicsItem
+    \item EnemyGraphicsItem
+\end{itemize}
+
+\subsubsection{GUI}
+Erillään olevaa graafista käyttöliittymää kuvataan hallinnoivalla oliolla GUI, joka pitää sisällään tiedon kentän, vihollisten ja tornien piirrosolioista. GUI oliossa on myös logiikan ja graafiikan päivittämistä hallinoivat ajastimet. Pelilogiikka liitetään graafiseen käyttöliittymään antamalla GUI oliolle oma pelimaailma olio. \\
+
+\noindent Keskeisiä metodeja GUI:lle ovat:
+
+\begin{itemize}
+    \item add\_enemy\_graphics\_items(), lisää graafisen esityksen vihollisille, joilta se puuttuu
+    \item add\_tower\_graphics\_items(), vastaava kuin add\_enemy\_graphics\_items()
+    \item add\_map\_squares(), piirtää ruudukkoon oikeat grafiikat
+    \item init\_window(), alustaa graafisen käyttöliittymän ikkunan
+    \item init\_buttons(), alustaa käyttöliittymään painikkeet ja liittää niihin oikeat toiminnot
+    \item update\_enemies(), päivittää vihollisten uuden sijainnin grafiikkaan
+\end{itemize}
+
+\subsubsection{Ammus}
+Ammus on pelkästään graafinen efekti esittämään tornien hyökkäämistä vihollisiin. Eri ammukset luetaan tornien xml-tiedostosta. Ammusten tyyppien esittämistä varten on lueteltu tyyppi ProjectileType. Perii Qt:n QGraphicsItem luokan kuvien esittämistä varten.
+
+\subsubsection{TowerGraphicsItem}
+Tornien grafiikkaa varten on TowerGraphicsItem olio, johon liitetään aina sitä vastaava torni. TowerGraphicsItem perii Qt:n QGraphicsItem luokan, jolloin sille on määritelty valmiiksi paljon perusominaisuuksia, kuten kuvien esittäminen. TowerGraphicsItem toteuttaa uudestaan hiirelläklikkausmetodin mousePressEvent(), jotta torni voidaan aktivoida päivitettäväksi ja tietojen näyttämistä varten.
+
+\subsubsection{EnemyGraphicsItem}
+Vastaavasti vihollisten grafiikka esitetään EnemyGraphicsItem oliolla, johon liitetään vastaava vihollinen. Perii myöskin QGraphicsItem luokan. Hiirellä klikkaamalla saadaan vastaavasti vihollisen tiedot esille ruudulle. Tärkeänä metodina on update\_pos(), jolla päivitetään grafiikan sijainti vastaamaan liitetyn vihollisen koordinaatteja.
+
+\newpage
+\subsection{UML-kaavio}
+\begin{figure}[H]
+    \includegraphics[scale=0.4]{Rakenne}
+    \caption{UML-kaavio luokkien välisistä suhteista}
+    \label{fig:uml}
+\end{figure}
+
+\newpage
+\section{Käyttötapauskuvaus}
+Pelaaja aloittaa pelin valitsemalla graafisesta käyttöliittymästä uuden pelin. Tämä käynnistää maailman luonnin, jolloin luodaan GameWorld ja GUI oliot. Näihin luetaan konfiguraatio- ja kenttätiedostoista oikeat tiedot vihollisille, torneille ja kentälle. Tällöin käyttöliittymään piirtyy tyhjä kenttä. Seuraavaksi pelaajalle on jonkin kiinteän ajan verran aikaa sijoittaa aloitustorninsa ennen pelin alkua. Pelaaja sijoittaa aloitustorninsa ensiksi valitsemalla tornivalikosta haluamansa tornin aktiiviseksi ja seuraavaksi klikkaamalla sopivaa ruutua pelikentällä. Kun varsinainen peli alkaa, synnytetään aloitusruutuun hiljakseen kierrokseen kuuluvia vihollisia, jotka lähtevät liikkumaan kohti maalia. Peli etenee tällä tavalla itsekseen, kunnes kaikki kierroksen viholliset on tuhottu tai ne ovat päässeet maaliruutuun ja pelaajan elämät ovat loppuneet. Pelaaja voi kierroksen ollessa käynnissä lisätä torneja tai päivittää niitä.
+
+\section{Algoritmit}
+Vihollisten liikkuminen alkuruudusta maaliruutuun on toteutettu hyvin yksinkertaisesta johtuen ennaltamääritetystä reitistä. Viholliset tietävät entuudestaan koko reitin eli mihin ruutuun seuraavaksi liikutaan. Vihollinen pitää kirjaa siitä missä ruudussa on tällä hetkellä ja move() metodia kutsuttaessa vihollinen siirtyy järjestyksessä seuraavaan ruutuun.
+
+Tornit tietävät tarkalleen kaikkien vihollisten sijainnin, minkä takia ne voivat tarkastella toistuvasti ovatko ne ampumaetäisyydellä vihollisesta. Tornien ampumaetäisyys on ruudukossa määritetty etäisyys jokaiseen väli- ja pää\-il\-man\-suun\-taan. Viholliset voivat kuitenkin vain sijaita yhden ruudun levyisellä ennaltamäärätyllä reitillä, joten algoritmin tarvitsee tarkastella vaan etäisyydellä olevia reitin ruutuja.
+
+\section{Tietorakenteet}
+Pelimaailmassa vihollinen ja torni oliot säilytetään listassa, koska niiden määrä muuttuu dynaamisesti pelin edetessä. Eri tyyppien ilmaisemiseen käytetään lueteltua tyyppiä (enum), koska se on kuvaavampi tapa ilmaista kuin pelkät numerot. Lueteltu tyyppi toimii myös mukavasti sanakirjoissa avaimena.
+
+Tornien päivitykset säilytetään sanakirjassa, jonka avaimena on lueteltun tyypin UpgradeType ja kokonaisluvun muodostama tuple. Sanakirjan arvona on päivitystä vastaava ominaisuuden nouseminen kokonaislukuna. Tornien päivitystilanteesta pidetään kirjaa upgrade\_levels sanakirjalla, jonka avaimena on päivityksen tyyppi UpgradeType. Kun halutaan päivittää tornia, voidaan ensin kysyä päivitystä vastaava kokonaisluku tältä sanakirjalta, jonka jälkeen oikeaa tasoa vastaava päivitys saadaan toisesta sanakirjasta. Sanakirja on hyvä valinta, koska päivitykset eivät muutu kesken pelin vaan ne alustetaan pelin alussa kerran.
+
+Pelin kierrokset säilytetään listassa, joka sisältää sanakirjoja, joiden avaimina on vihollistyyppi EnemyType ja arvoina vihollisten määrä kokonaislukuna. Esimerkiksi [\{enemy\_a:3, enemy\_b:5\}, \{enemy\_a:10, enemy\_b:8\}], jolloin ensimmäisellä kierroksella enemy\_a olisi 3 kpl ja enemy\_b 5 kpl. Vastaavat määrät seuraavalla kierroksella olisivat 10 ja 8 kpl.
+
+
+\section{Aikataulu}
+Pelin toteuttaminen lähtee liikkeelle pelilogiikalle olennaisten perusolioiden, kuten vihollinen, ruutu ja torni, toteuttamisesta. Peruskäyttöön soveltuvan version toteuttamiseen menee aikaa arviolta yksi tunti. 
+
+Seuraavaksi toteutetaan pelimaailma olio ja kenttätiedostojen lukeminen tiedostosta. Tähän kuluu arviolta 3-8h, riippuen kuinka vaikeaksi tiedostoformaatin lukeminen osoittautuu.
+
+
+Jotta peli saadaan pyörimään on tärkeää toteuttaa graafista esitystä varten GUI, TowerGraphicsItem ja EnemyGraphicsItem oliot. Tähän kuluu arviolta kaksi tuntia, että peruspohja saadaan luotua. Seuraavaksi on hyvä toteuttaa perus logiikan kutsuminen käyttöliittymään, jotta alkeellinen peli saadaan pyörimään ruudulla. Tähän arvion mukaan voisi kulua 5-8h.
+
+Seuraavaksi toteutetaan konfiguraatiotiedostojen luku. Arvioisin tähän kuluvan vain 2-3h, koska käytetty xml-formaatti on yksinkertainen ja siihen löytyy valmis lukukirjasto Pythonista.
+
+Kun konfiguraatiotiedostoista saadaan halutut tiedot, voidaan toteuttaa torneille päivityssysteemi. Tähän arvioin aikaa kuluvaksi 2-3h.
+
+Lisäksi aikaa kuluu graafisen järjestelmän hiomiseen, kuten ammusten lisää\-miseen ja vihollisten liikkeen interpolointiin. Arviolta aikaa kuluu 5-8h.
+\section{Yksikkötestaussuunnitelma}
+Kenttien luomista voidaan testata yksikkötesteillä esimerkiksi kokeilemalla, että onko haluttu ruutu oikean tyyppinen. Vihollisten ja tornien alustamista voidaan myös tutkia samanlailla yksikkötesteillä tarkastellen niiden ominaisuuksia. Myös vihollisten liikkumista voidaan testata ennalta määrätyllä reitillä tarkistamalla, että onko vihollisen sijainti muuttunut oikeaan ruutuun.
+
+\section{Kirjallisuusviitteet ja linkit}
+
+XML-tiedostojen lukuun: \\
+https://docs.python.org/3.6/library/xml.etree.elementtree.html \\
+PyQT5 dokumentaatio: \\
+http://pyqt.sourceforge.net/Docs/PyQt5/ \\
+Esimerkki kierrosten toteuttamisesta pelissä: \\
+https://www.raywenderlich.com/37701/how-to-make-a-tower-defense-game-tutorial
+
+\end{document}
