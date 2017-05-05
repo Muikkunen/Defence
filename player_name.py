@@ -1,8 +1,5 @@
 from PyQt5.QtWidgets import QWidget, QLabel, QLineEdit, QApplication
 
-#def asdf():
-#	print("asdfasdfasdf")
-
 class PlayerName(QWidget):
 	
 	def __init__(self, GUI):

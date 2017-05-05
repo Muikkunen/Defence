@@ -22,20 +22,6 @@ def add_high_score(file_name, difficulty, name, level, points):
 
 							lines = file.read()
 
-							"""lines = []
-							line = file.readline()
-
-							while line != "":
-								if (10 - lines_read) != 0:				# Skip the 10th score and so remove it from the file
-									lines.append(line)
-								line = file.readline()
-								print(line)
-								lines_read += 1"""
-
-							"""lines = []
-							for i in range(10 - lines_read):
-								lines.append(file.readline())"""
-
 							file.seek(last_position)
 							characters = len(name)
 							spaces = " " * (16 - characters)

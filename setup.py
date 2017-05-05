@@ -44,7 +44,7 @@ class Setup(object):
 			if current_line[0] in game.get_enemy_types():
 				# Add current wave to the Board
 				game.get_board().add_wave(current_line[0], int(current_line[1]))
-			else:												#----------------------------------NOT IMPLEMENTED---------------
+			else:
 				print("Enemy not in game types")
 
 
@@ -205,10 +205,6 @@ class Setup(object):
 				game_information = [money, lives, time, interval, fps]
 				game.setup(game_information)
 				return game
-
-			"""# Examine whether money and lives have been found
-			if game.get_money() != 0 and game.get_lives() != 0 and game.get_time_between_waves() != 0 and game.get_enemy_spawn_interval() != 0:
-				return game"""
 
 
 	def load_all(self, input):

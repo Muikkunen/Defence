@@ -39,10 +39,5 @@ class BoardGraphicsItem(QtWidgets.QGraphicsPixmapItem):
 			self.setPixmap(QPixmap("images/" + difficulty + "/Board.png"))
 
 
-		"""if self.square.get_type() == "KILLER1":
-			self.setPixmap(QPixmap("images/Board_1.png"))
-		elif self.square.get_type() == "KILLER2":
-			self.setPixmap(QPixmap("images/Board_2.png"))"""
-
 		location = [placement[0] * square_size, placement[1] * square_size]
 		self.setPos(location[0], location[1])

@@ -86,12 +86,6 @@ class Enemy(object):
 		self.location = new_location(self.location, self.destination, self.speed)
 		self.degrees = direction(self.location, self.destination, self.degrees)		# Calculate the direction to which the enemy is going to
 
-		# Finally actually move the enemy and convert to int to avoid decimal numbers which occur due to multiplying with -1
-		#self.location[first_indicator] += int(speed * (second_indicator))
-
-		#print("Enemy's location: {}".format(self.location))
-		#print("Enemy's hitpoints: {}".format(self.hitpoints))
-
 
 	def set_next_destination(self):
 		square_size = self.game.get_board().get_square_size()

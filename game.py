@@ -147,7 +147,8 @@ class Game():
 				enemy = Enemy(self.enemy_types[enemy_name])			# Select the enemy's type from game's dictionary
 				enemies_to_be_added.append(enemy)
 		except IndexError:
-			print("Trying to find too many enemies from a wave")
+			self.lives = 0
+			print("No more enemies to be added")
 	
 		self.get_board().advance_to_next_wave()
 		#self.adding_enemies = False								# Indicate that new enemies are not currently being added

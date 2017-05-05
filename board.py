@@ -150,7 +150,7 @@ class Board(object):
 					if self.squares[self.route_points[i][0]][j].contains() == 0:
 						self.squares[self.route_points[i][0]][j].set_route()
 					else:
-						print("CANNOT ADD")										#----------------------- NOT IMPLEMENTED
+						print("CANNOT ADD")
 
 			# If consecutive route points have the same y-coordinate set the horizontal squares between first and second point to route
 			elif self.route_points[i][1] == self.route_points[i + 1][1]:
@@ -165,7 +165,7 @@ class Board(object):
 					if self.squares[j][self.route_points[i][1]].contains() == 0:
 						self.squares[j][self.route_points[i][1]].set_route()
 					else:
-						print("CANNOT ADD")										#----------------------- NOT IMPLEMENTED
+						print("CANNOT ADD")
 
 		self.enemy_start_location = list(self.route_points[0])		# Define the point where enemies should start
 

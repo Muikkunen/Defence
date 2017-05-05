@@ -174,7 +174,7 @@ Type		Tank
 Damage		20
 Range		100
 Reload_time	50
-Build_time	500
+Build_time	5000
 Cost		1000
 Image		Tank.png
 Base		Tank_base.png

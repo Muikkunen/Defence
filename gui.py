@@ -352,6 +352,8 @@ class GUI(QtWidgets.QMainWindow):
 	def check_points(self):
 		name = self.qLineEdit.get_text()
 		name = "".join(name.split())
+		if len(name) < 1:
+			name = "Nameless"
 		add_high_score(self.high_scores_data, "#" + self.game.get_board().get_difficulty(), name, self.level, self.points)
 		self.qLineEdit.setParent(None)
 		self.game.initialize()
